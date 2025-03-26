@@ -1,29 +1,24 @@
 import useFileContext from "../../hooks/useFileContext";
-import CreateFolder from "./CreateFile";
-
-export const CreateFileComponent = ({ name, idx }: { name: string; idx: number }) => {
-    return (
-        <>
-            <div className="mr-4" key={idx}
-            onClick={() => console.log("Hello")}
-            >
-                <li className="cursor-pointer">{name}</li>
-            </div>
-        </>
-    );
-};
+import { uniqueId } from "../../utils/utils";
+import CreateFile from "./CreateFile";
+import { CreateFileComponent } from "./CreateFileComponent";
 
 export const FileNames = () => {
-    const { isFileClick, fileNames } = useFileContext();
+    const { isFileClickIcon, fileNames } = useFileContext();
+    const id = uniqueId();
+
     return (
-        <ul className="mt-4 text-sm ">
+        <section className="mt-4 text-sm ">
             {Array.from(fileNames) && fileNames.length > 0
-                ? fileNames.map((names, idx) => (
-                    <CreateFileComponent name={names} idx={idx} />
+                ? fileNames.map((names) => (
+                    <ul key={id} className="flex justify-center items-center">
+
+                    <CreateFileComponent name={names} />
+                    </ul>
                   ))
                 : []}
 
-            {isFileClick ? <CreateFolder /> : null}
-        </ul>
+            {isFileClickIcon ? <CreateFile /> : null}
+        </section>
     );
 };

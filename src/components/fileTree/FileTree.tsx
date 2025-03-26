@@ -5,7 +5,7 @@ import { FileNames } from "./FileNames";
 export default function FileTree() {
   return (
     <FileTreeContextProvider>
-      <main className="bg-[#181818] max-w-56 text-white min-h-screen">
+      <main className="bg-[#181818] max-w-full text-white min-h-screen">
         <div className="flex justify-around align-center ">
           <h1 className="mt-4">code editor</h1>
           <div className="flex justify-around align-center mt-4 cursor-pointer">
