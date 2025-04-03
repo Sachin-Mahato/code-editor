@@ -1,9 +1,9 @@
 import useFileContext from "../../hooks/useFileContext";
 
 export default function FileIcon() {
-    const { handleFileClick } = useFileContext()
+    const { handleFileIconClick } = useFileContext()
     return (
-        <div onClick={handleFileClick}>
+        <div onClick={handleFileIconClick}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"

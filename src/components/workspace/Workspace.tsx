@@ -7,12 +7,10 @@ const Workspace = ({ title }: { title: string }) => {
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => 
         setText(e.target.value);
 
-    // count the number new lines is create by the user or when the user press enter it create a new line
     const handleTextareaSize = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
          if(e.code === "Enter") {
              setRow(prev => prev + 1);
          } else if (e.code === "Tab") {
-            // Prevent default tab behavior
             e.preventDefault()
             const target = e.target as HTMLTextAreaElement;
 
@@ -26,7 +24,6 @@ const Workspace = ({ title }: { title: string }) => {
             target.selectionStart = target.selectionEnd = start + 4;
          }
     }
-
 
     return (
         <section className="max-w-full bg-[#1f1f1f] text-white">

@@ -2,11 +2,12 @@ import React from "react";
 import useFileContext from "../../hooks/useFileContext";
 
 const CreateFile = () => {
-    const { inputValues, inputHandler, handleFileNames } = useFileContext()
+    const { inputValues, inputHandler, handleFileNames, handleFileIconClick } = useFileContext()
 
     const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.code === "Enter") {
             handleFileNames(inputValues)
+            handleFileIconClick()
         }
     }
 

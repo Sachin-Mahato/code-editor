@@ -1,16 +1,15 @@
-import React from "react";
 import useFileContext from "../../hooks/useFileContext";
 
 export const CreateFileComponent = ({ name}: { name: string  }) => {
+    const {handleFileActive, isFileActive} = useFileContext()
 
-    const {clickedFile, handleFileActive} = useFileContext()
+    console.log("isFileActive",isFileActive) 
 
     return (
         <>
             <div className="" 
-            onClick={(e:React.MouseEvent) => {
-                handleFileActive(e,name)
-                clickedFile(name)
+            onClick={() => {
+                handleFileActive(name)
             }}
             >
                 <li className="cursor-pointer">{name}</li>
