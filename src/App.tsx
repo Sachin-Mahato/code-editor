@@ -1,11 +1,11 @@
-import { FileTreeParent } from "./components/fileTree/FileTreeParent";
+import FileTreeContainer from './components/fileTree/FileTreeContainer';
 
 export default function App() {
 
-  return (
-    <>
-      <FileTreeParent />
-    </>
-  )
+    return (
+        <>
+            <FileTreeContainer />
+        </>
+    )
 }
 
