@@ -1,7 +1,7 @@
 import { FileIcon, FolderIcon } from "../icons/index";
-import { FileNames } from "./FileNames";
+import { FileList } from "./FileList";
 
-export default function FileTree() {
+export default function FileExplorer() {
     return (
         <>
             <main className="bg-[#181818] max-w-full text-white min-h-screen">
@@ -12,7 +12,7 @@ export default function FileTree() {
                         <FolderIcon />
                     </div>
                 </div>
-                <FileNames />
+                <FileList />
             </main>
         </>
     );

@@ -1,11 +1,11 @@
 import FileTreeContextProvider from "../../context/FileContext"
-import { FileTreeParent } from "./FileTreeParent"
+import { FileTreeLayout } from "./FileTreeLayout"
 
 const FileTreeContainer = () => {
     return (
         <FileTreeContextProvider>
 
-            <FileTreeParent />
+            <FileTreeLayout />
         </FileTreeContextProvider>
     )
 }

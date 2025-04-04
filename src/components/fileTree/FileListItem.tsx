@@ -1,15 +1,14 @@
 import useFileContext from "../../hooks/useFileContext";
 
-export const CreateFileComponent = ({ name}: { name: string  }) => {
-    const {handleFileActive, isFileActive} = useFileContext()
+export const FileListItem = ({ name}: { name: string  }) => {
+    const {toggleFileActiveState, } = useFileContext()
 
-    console.log("isFileActive",isFileActive) 
 
     return (
         <>
             <div className="" 
             onClick={() => {
-                handleFileActive(name)
+                toggleFileActiveState(name)
             }}
             >
                 <li className="cursor-pointer">{name}</li>
