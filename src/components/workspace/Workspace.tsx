@@ -1,39 +1,22 @@
-import React, { useState } from "react";
+import useFileContext from "../../hooks/useFileContext";
 
-const Workspace = ({ title }: { title: string }) => {
-    const [text, setText] = useState("")
-    const [row, setRow] = useState(1)
+const Workspace = ({ title, id }: { title: string, id: string }) => {
+    const { handleFileContentChange, activeFiles, handleTextareaSize} = useFileContext()
 
-    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => 
-        setText(e.target.value);
+    const textValue = activeFiles.find(file => file.id === id)?.text || ""
+    const row = activeFiles.find(file => file.id === id)?.row || 1
 
-    const handleTextareaSize = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-         if(e.code === "Enter") {
-             setRow(prev => prev + 1);
-         } else if (e.code === "Tab") {
-            e.preventDefault()
-            const target = e.target as HTMLTextAreaElement;
-
-            const start = target.selectionStart;
-            const end = target.selectionEnd;
-
-            // Insert 4 spaces at the cursor position
-            target.value = target.value.substring(0, start) + "    " + target.value.substring(end);
-
-            // Move the cursor to the right by 4 spaces
-            target.selectionStart = target.selectionEnd = start + 4;
-         }
-    }
+    console.log("text",activeFiles)
 
     return (
         <section className="max-w-full bg-[#1f1f1f] text-white">
             <div className="h-full">
 
-                <h2>{title}</h2>
+                <h2 className="text-center">{title}</h2>
                 <textarea
-                defaultValue={text}
-                onKeyDown={handleTextareaSize}
-                onChange={handleTextareaChange}
+                defaultValue={textValue}
+                onKeyDown={(e) => handleTextareaSize(e, id)}
+                onChange={(e) =>  handleFileContentChange(e, id)}
                 autoFocus placeholder="type of text..."
                 rows={row}
                 className="block w-full border-none outline-none resize-none  overflow-auto leading-normal"

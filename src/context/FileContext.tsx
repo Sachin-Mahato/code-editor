@@ -9,7 +9,9 @@ type File = {
 type ActiveFile = {
     id: string,
     name: string,
-    isActive: boolean
+    isActive: boolean,
+    text: string,
+    row: number
 }
 
 const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
@@ -29,7 +31,17 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-        setFileInputValue(e.target.value.trim().toLowerCase())
+        setFileInputValue(e.target.value.trim().toLowerCase());
+
+    const handleFileContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>, id: string) => {
+        const newContent = e.target.value;
+
+        setActiveFiles(prev => 
+            prev.map(file => 
+                file.id === id ? { ...file, text: newContent } : file
+            )
+        );
+    }
 
     const addFileToList = (input: string) => {
         if (input.trim() && input.length > 1) {
@@ -42,26 +54,51 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const handleTextareaSize = (e: React.KeyboardEvent<HTMLTextAreaElement>,id:string) => {
+         if(e.code === "Enter") {
+            setActiveFiles(prev => 
+                prev.map(file => 
+                    file.id === id ? { ...file, row: file.row + 1 } : file
+                )
+            )
+         } else if (e.code === "Tab") {
+            e.preventDefault()
+            const target = e.target as HTMLTextAreaElement;
+
+            const start = target.selectionStart;
+            const end = target.selectionEnd;
+
+            // Insert 4 spaces at the cursor position
+            target.value = target.value.substring(0, start) + "    " + target.value.substring(end);
+
+            // Move the cursor to the right by 4 spaces
+            target.selectionStart = target.selectionEnd = start + 4;
+         }
+    }
     const checkIfFileClicked = (name: string) => 
         fileList.some(file => file.name === name.toLowerCase().trim()) ? setIsFileClick(true) : setIsFileClick(false)
 
-    useEffect(() => {
-        setActiveFiles(() => fileList.map((ele) => ({ ...ele, isActive: false })))
-    },[fileList])
+    useEffect(() => 
+        setActiveFiles(() => fileList.map((ele) => ({ ...ele, isActive: false, text: "", row: 1})))
+    ,[fileList])
+
+
 
     return (
         <fileTreeContext.Provider
             value={{
                 fileInputValue,
-                handleFileInputChange,
                 fileList, 
                 isFileClickIcon,
                 isFileClick,
-                checkIfFileClicked,
                 activeFiles,
+                checkIfFileClicked,
+                handleFileInputChange,
                 toggleFileIconClick,      
                 toggleFileActiveState,
                 addFileToList,
+                handleFileContentChange,
+                handleTextareaSize,
             }}
         >
             {children}
