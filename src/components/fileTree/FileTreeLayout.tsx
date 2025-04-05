@@ -5,9 +5,8 @@ import FileExplorer from "./FileExplorer";
 export const FileTreeLayout = () => {
     const { activeFiles } = useFileContext()
 
-    console.log("activeFiles",activeFiles)
     return (
-        <div className="grid grid-cols-[20%_80%]">
+        <div className="grid grid-cols-[20%_60%_20%]">
             <FileExplorer />
             {
                 Array.isArray(activeFiles) && activeFiles.length > 0 ?
@@ -17,6 +16,7 @@ export const FileTreeLayout = () => {
                             : null
                     )) : null 
             }
+
         </div>
     );
 };

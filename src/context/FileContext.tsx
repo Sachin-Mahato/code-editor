@@ -18,16 +18,23 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     const [fileInputValue, setFileInputValue] = useState("")
     const [isFileClickIcon, setIsFileClickIcon] = useState(false)
     const [isFileClick, setIsFileClick] = useState(false)
-    const [fileList, setFileList] = useState<File[]>([])
-    const [activeFiles, setActiveFiles] = useState<ActiveFile[]>([])
+    const [fileList, setFileList] = useState<File[]>(() => {
+        const storedFileList = localStorage.getItem("fileList");
+        return storedFileList ? JSON.parse(storedFileList) : [];
+    });
 
-    const generateUniqueId = crypto.randomUUID()
+    const [activeFiles, setActiveFiles] = useState<ActiveFile[]>(() => {
+        const storedActiveFiles = localStorage.getItem("activeFiles");
+        return storedActiveFiles ? JSON.parse(storedActiveFiles) : [];
+    });
+
+    const generateUniqueId = () => crypto.randomUUID();
 
     const toggleFileIconClick = () => setIsFileClickIcon(prev => !prev)
 
     const toggleFileActiveState = (name: string) => {
-        setActiveFiles(prev => prev.map((ele) => 
-            ele.name.toLowerCase().trim() === name.toLowerCase().trim() ? {...ele, isActive: !ele.isActive} : {...ele, isActive:false}))
+        setActiveFiles(prev => prev.map((ele) =>
+            ele.name.toLowerCase().trim() === name.toLowerCase().trim() ? { ...ele, isActive: !ele.isActive } : { ...ele, isActive: false }))
     };
 
     const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -36,8 +43,8 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     const handleFileContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>, id: string) => {
         const newContent = e.target.value;
 
-        setActiveFiles(prev => 
-            prev.map(file => 
+        setActiveFiles(prev =>
+            prev.map(file =>
                 file.id === id ? { ...file, text: newContent } : file
             )
         );
@@ -46,7 +53,7 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     const addFileToList = (input: string) => {
         if (input.trim() && input.length > 1) {
             const value = {
-                id: generateUniqueId,
+                id: generateUniqueId(),
                 name: input.toLowerCase().trim()
             }
             setFileList((prev) => [...prev, value])
@@ -54,14 +61,14 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const handleTextareaSize = (e: React.KeyboardEvent<HTMLTextAreaElement>,id:string) => {
-         if(e.code === "Enter") {
-            setActiveFiles(prev => 
-                prev.map(file => 
+    const handleTextareaSize = (e: React.KeyboardEvent<HTMLTextAreaElement>, id: string) => {
+        if (e.code === "Enter") {
+            setActiveFiles(prev =>
+                prev.map(file =>
                     file.id === id ? { ...file, row: file.row + 1 } : file
                 )
             )
-         } else if (e.code === "Tab") {
+        } else if (e.code === "Tab") {
             e.preventDefault()
             const target = e.target as HTMLTextAreaElement;
 
@@ -73,28 +80,31 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
 
             // Move the cursor to the right by 4 spaces
             target.selectionStart = target.selectionEnd = start + 4;
-         }
+        }
     }
-    const checkIfFileClicked = (name: string) => 
+    const checkIfFileClicked = (name: string) =>
         fileList.some(file => file.name === name.toLowerCase().trim()) ? setIsFileClick(true) : setIsFileClick(false)
 
-    useEffect(() => 
-        setActiveFiles(() => fileList.map((ele) => ({ ...ele, isActive: false, text: "", row: 1})))
-    ,[fileList])
 
+    useEffect(() => {
+        localStorage.setItem("fileList", JSON.stringify(fileList));
+    }, [fileList]);
 
+    useEffect(() => {
+        localStorage.setItem("activeFiles", JSON.stringify(activeFiles));
+    }, [activeFiles]);
 
     return (
         <fileTreeContext.Provider
             value={{
                 fileInputValue,
-                fileList, 
+                fileList,
                 isFileClickIcon,
                 isFileClick,
                 activeFiles,
                 checkIfFileClicked,
                 handleFileInputChange,
-                toggleFileIconClick,      
+                toggleFileIconClick,
                 toggleFileActiveState,
                 addFileToList,
                 handleFileContentChange,
