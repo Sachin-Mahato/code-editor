@@ -1,98 +1,80 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { fileTreeContext } from "./fileTreeContext";
 
-type File = {
-    id: string,
-    name: string
+type Stylesheet = {
+    stylesheetId: number,
+    cssText: string,
 }
 
-type ActiveFile = {
-    id: string,
-    name: string,
+type File = {
+    fileId: string,
+    fileName: string,
+    language: string,
+    content: string,
     isActive: boolean,
-    text: string,
-    row: number
+    linkedCSS: Stylesheet[],
 }
 
 const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     const [fileInputValue, setFileInputValue] = useState("")
     const [isFileClickIcon, setIsFileClickIcon] = useState(false)
     const [isFileClick, setIsFileClick] = useState(false)
-    const [fileList, setFileList] = useState<File[]>(() => {
-        const storedFileList = localStorage.getItem("fileList");
-        return storedFileList ? JSON.parse(storedFileList) : [];
-    });
-
-    const [activeFiles, setActiveFiles] = useState<ActiveFile[]>(() => {
-        const storedActiveFiles = localStorage.getItem("activeFiles");
-        return storedActiveFiles ? JSON.parse(storedActiveFiles) : [];
-    });
+    const [fileList, setFileList] = useState<File[]>([]);
+    const [editorVal, setEditorVal] = useState("");
 
     const generateUniqueId = () => crypto.randomUUID();
-
     const toggleFileIconClick = () => setIsFileClickIcon(prev => !prev)
 
-    const toggleFileActiveState = (name: string) => {
-        setActiveFiles(prev => prev.map((ele) =>
-            ele.name.toLowerCase().trim() === name.toLowerCase().trim() ? { ...ele, isActive: !ele.isActive } : { ...ele, isActive: false }))
+    const toggleFileActiveState = (e: React.MouseEvent<HTMLDivElement>, name: string) => {
+        e.stopPropagation()
+        setFileList(prev => prev.map((ele) =>
+            ele.fileName.toLowerCase().trim() === name.toLowerCase().trim() ? { ...ele, isActive: !ele.isActive } : { ...ele, isActive: false }))
+    
+        setEditorVal("");
     };
 
     const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         setFileInputValue(e.target.value.trim().toLowerCase());
 
-    const handleFileContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>, id: string) => {
-        const newContent = e.target.value;
-
-        setActiveFiles(prev =>
-            prev.map(file =>
-                file.id === id ? { ...file, text: newContent } : file
-            )
-        );
-    }
-
     const addFileToList = (input: string) => {
         if (input.trim() && input.length > 1) {
-            const value = {
-                id: generateUniqueId(),
-                name: input.toLowerCase().trim()
+            const inputVal = input.trim().toLocaleLowerCase()
+            const dot = inputVal.indexOf(".")
+            const inputLang = inputVal.substring(dot + 1, inputVal.length)
+            const value: File = {
+                fileId: generateUniqueId(),
+                fileName: inputVal,
+                language: inputLang,
+                content: "",
+                isActive: false,
+                linkedCSS: [],
             }
             setFileList((prev) => [...prev, value])
             setFileInputValue("")
         }
     };
 
-    const handleTextareaSize = (e: React.KeyboardEvent<HTMLTextAreaElement>, id: string) => {
-        if (e.code === "Enter") {
-            setActiveFiles(prev =>
-                prev.map(file =>
-                    file.id === id ? { ...file, row: file.row + 1 } : file
-                )
-            )
-        } else if (e.code === "Tab") {
-            e.preventDefault()
-            const target = e.target as HTMLTextAreaElement;
-
-            const start = target.selectionStart;
-            const end = target.selectionEnd;
-
-            // Insert 4 spaces at the cursor position
-            target.value = target.value.substring(0, start) + "    " + target.value.substring(end);
-
-            // Move the cursor to the right by 4 spaces
-            target.selectionStart = target.selectionEnd = start + 4;
+    const editorHandleChange = (val: string | undefined, id: string) => {
+        if (val !== undefined) {
+            setEditorVal(val);
+            setFileList(prev => prev.map(ele => {
+                if (ele.fileId === id ) {
+                    return { ...ele, content: val}
+                }
+                return ele;
+            }));
         }
-    }
+        // find style is exist or not in the html
+
+        // const findHref = /<link[^>]*href="([^"]+\.css)"[^>]*>/;
+        // const match = str.match(findHref)
+
+    
+ 
+    };
+
     const checkIfFileClicked = (name: string) =>
-        fileList.some(file => file.name === name.toLowerCase().trim()) ? setIsFileClick(true) : setIsFileClick(false)
-
-
-    useEffect(() => {
-        localStorage.setItem("fileList", JSON.stringify(fileList));
-    }, [fileList]);
-
-    useEffect(() => {
-        localStorage.setItem("activeFiles", JSON.stringify(activeFiles));
-    }, [activeFiles]);
+        fileList.some(file => file.fileName === name.toLowerCase().trim()) ? setIsFileClick(true) : setIsFileClick(false)
 
     return (
         <fileTreeContext.Provider
@@ -101,14 +83,13 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
                 fileList,
                 isFileClickIcon,
                 isFileClick,
-                activeFiles,
+                editorVal,
                 checkIfFileClicked,
                 handleFileInputChange,
                 toggleFileIconClick,
                 toggleFileActiveState,
                 addFileToList,
-                handleFileContentChange,
-                handleTextareaSize,
+                editorHandleChange,
             }}
         >
             {children}

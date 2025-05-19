@@ -4,14 +4,13 @@ import { FileListItem } from "./FileListItem";
 
 export const FileList = () => {
     const { isFileClickIcon, fileList } = useFileContext()
-
     return (
         <section className="mt-4 text-sm ">
-            {Array.from(fileList) && fileList.length > 0
+            {Array.isArray(fileList) && fileList.length > 0
                 ? fileList.map((names) => (
-                    <ul key={names.id} className="flex justify-center items-center">
+                    <ul key={names.fileId} className="flex justify-center items-center">
                         
-                    <FileListItem name={names.name} />
+                    <FileListItem name={names.fileName} />
                     </ul>
                   ))
                 : []}

@@ -1,30 +1,46 @@
+import { Editor, OnMount } from "@monaco-editor/react";
+import { useEffect, useRef} from "react";
 import useFileContext from "../../hooks/useFileContext";
 
-const Workspace = ({ title, id }: { title: string, id: string }) => {
-    const { handleFileContentChange, activeFiles, handleTextareaSize} = useFileContext()
-
-    const textValue = activeFiles.find(file => file.id === id)?.text || ""
-    const row = activeFiles.find(file => file.id === id)?.row || 1
-
-    console.log("text",activeFiles)
-
-    return (
-        <section className="max-w-full bg-[#1f1f1f] text-white">
-            <div className="h-full">
-
-                <h2 className="text-center">{title}</h2>
-                <textarea
-                defaultValue={textValue}
-                onKeyDown={(e) => handleTextareaSize(e, id)}
-                onChange={(e) =>  handleFileContentChange(e, id)}
-                autoFocus placeholder="type of text..."
-                rows={row}
-                className="block w-full border-none outline-none resize-none  overflow-auto leading-normal"
-
-                />
-            </div>
-        </section>
-    )
+interface WorkspaceProps {
+  title: string;
+  id: string;
+  lang: string;
+  val: string;
 }
+
+const Workspace = ({ title, id, lang, val, }: WorkspaceProps) => {
+  const { editorVal, editorHandleChange } = useFileContext();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const editorRef = useRef<any>(null);
+
+  const handleEditorDidMount: OnMount = (editor) => {
+    editorRef.current = editor;
+    editor.focus();
+  };
+
+  useEffect(() => {
+    editorRef.current?.focus();
+  }, []);
+
+
+  return (
+    <div className="flex flex-col">
+      <p>{title}</p>
+      <Editor
+        height="100%"
+        width="100%"
+        theme="vs-dark"
+        path={id}
+        language={lang}
+        defaultValue={val}
+        value={editorVal}
+        onChange={(value) => editorHandleChange(value, id,)}
+        onMount={handleEditorDidMount}
+      />
+    </div>
+  );
+};
 
 export default Workspace;

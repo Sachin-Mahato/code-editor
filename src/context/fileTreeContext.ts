@@ -1,31 +1,33 @@
 import React, { createContext } from "react";
 
-type File = {
-    id: string,
-    name: string
+type Stylesheet = {
+    stylesheetId: number,
+    cssText: string,
 }
 
-type ActiveFile = {
-    id: string,
-    name: string,
+type File = {
+    fileId: string,
+    fileName: string,
+    language: string,
+    content: string,
     isActive: boolean,
-    text: string,
-    row: number,
+    linkedCSS: Stylesheet[],
 }
+
+
 
 interface FileTreeContextType {
     fileInputValue: string;
     fileList: File[];
     isFileClickIcon: boolean;
-    activeFiles: ActiveFile[];
     isFileClick: boolean;
+    editorVal: string;
     handleFileInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     checkIfFileClicked: (name: string) => void;
     toggleFileIconClick: () => void;
     addFileToList: (input: string) => void;
-    toggleFileActiveState: ( name: string) => void;
-    handleFileContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>, id: string) => void
-    handleTextareaSize :( e: React.KeyboardEvent<HTMLTextAreaElement>,id:string) => void 
+    toggleFileActiveState: (e:React.MouseEvent<HTMLDivElement>, name: string) => void;
+    editorHandleChange: (val: string | undefined, id: string) => void;
 }
 
 export const fileTreeContext = createContext<FileTreeContextType | null>(null)
