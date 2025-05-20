@@ -1,43 +1,43 @@
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import useFileContext from "../../hooks/useFileContext";
 
-interface Preview  {
+interface Preview {
     htmlValue: string
-    lang: string
 }
-const LivePreview = ({htmlValue,lang}:Preview) => {
-    const prevRef = useRef<HTMLDivElement>(null);
-    const {fileList} = useFileContext();
+const LivePreview = ({ htmlValue }: Preview) => {
+    const { cssFiles } = useFileContext();
 
     useEffect(() => {
-        const container = prevRef.current;
-        let style: HTMLStyleElement | undefined;
-        if (lang === "css" && container) {
-            style = document.createElement("style");
-            style.textContent = fileList.map(f => f.language === "css" ? f.content : "").join("");
-            if (container.parentNode) {
-                container.parentNode.appendChild(style);
-            }
+        const isActive = cssFiles.some(f => f.isOpen);
+        if (!isActive) {
+            return;
         }
-        return () => {
-            if (style) {
-                style.remove();
-            }
-        }
-    }, [lang, fileList])
+        const container = document.querySelector('[role="preview"]');
+        if (!container) return;
 
+        const style = document.createElement("style");
+        style.textContent = cssFiles.map(ele => ele.content).join("");
+        container.appendChild(style);
+
+        // Remove only the style element on cleanup
+        return () => {
+            container.removeChild(style);
+        };
+    }, [cssFiles]);
 
     return (
-        <div 
-            className="w-full h-full" 
+        <section
+            className="w-full h-full"
             role="preview"
         >
-            <div
-            dangerouslySetInnerHTML={{__html: htmlValue}}
-            ref={prevRef}
-            
-            ></div>
-        </div>
+            <div>
+
+                <div
+                    dangerouslySetInnerHTML={{ __html: htmlValue }}
+
+                ></div>
+            </div>
+        </section>
     )
 }
 

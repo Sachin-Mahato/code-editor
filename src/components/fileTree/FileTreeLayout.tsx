@@ -4,15 +4,15 @@ import Workspace from "../workspace/Workspace";
 import FileExplorer from "./FileExplorer";
 
 export const FileTreeLayout = () => {
-    const { fileList } = useFileContext()
+    const { fileList,htmlFiles } = useFileContext()
     return (
-        <div className="grid grid-cols-[20%_50%_30%]">
+        <div className="grid grid-cols-[20%_50%_30%] grid-rows-1">
             <FileExplorer />
 
             {
                 Array.isArray(fileList) && fileList.length > 0 ?
                     fileList.map(file => (
-                        file.isActive ?
+                        file.isOpen ?
                             <Workspace
                                 key={file.fileId}
                                 title={file.fileName}
@@ -25,15 +25,16 @@ export const FileTreeLayout = () => {
             }
             <section role="region" aria-label="Live Preview">
                 {
-                    fileList.length > 0 ?
-                        fileList.map(file => (
+
+                    htmlFiles.length > 0 ?
+                        htmlFiles.map(file => (
                             <LivePreview
                                 key={file.fileId}
-                                htmlValue={file.language === "html" ? file.content : ""}
-                                lang={file.language}
+                                htmlValue={file.content}
                             />
                         ))
                         : []
+
                 }
             </section>
         </div>
