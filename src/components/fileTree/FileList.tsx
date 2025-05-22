@@ -1,7 +1,6 @@
 import useFileContext from "../../hooks/useFileContext";
 import FileNameInput from "./FileNameInput";
 import { FileListItem } from "./FileListItem";
-
 export const FileList = () => {
     const { isFileClickIcon, fileList} = useFileContext()
 
@@ -11,7 +10,10 @@ export const FileList = () => {
                 ? fileList.map((names) => (
                     <ul key={names.fileId} className="flex justify-center items-center">
                         
-                    <FileListItem name={names.fileName} />
+                    <FileListItem
+                     name={names.fileName} 
+                     
+                     />
                     </ul>
                   ))
                 : []}
