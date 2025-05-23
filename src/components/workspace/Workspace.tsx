@@ -1,6 +1,7 @@
 import { Editor, OnMount } from "@monaco-editor/react";
 import { useEffect, useRef } from "react";
 import useFileContext from "../../hooks/useFileContext";
+import useResize from "../../hooks/useResize";
 
 interface WorkspaceProps {
     title: string;
@@ -11,6 +12,8 @@ interface WorkspaceProps {
 
 const Workspace = ({ title, id, lang, val, }: WorkspaceProps) => {
     const { editorVal, editorHandleChange } = useFileContext();
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const refRight = useRef<HTMLDivElement | null>(null);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const editorRef = useRef<any>(null);
@@ -21,24 +24,34 @@ const Workspace = ({ title, id, lang, val, }: WorkspaceProps) => {
     };
 
     useEffect(() => {
-        editorRef.current?.focus();
+        editorRef.current?.focus()
     }, []);
 
+    useResize(containerRef,refRight)
 
     return (
-        <div className="flex flex-col">
-            <p style={{backgroundColor: "#1f1f1f", color: "#fff", paddingBlockEnd: "1em", paddingInlineStart: "1em"}}>{title}</p>
-            <Editor
-                height="100%"
-                width="100%"
-                theme="vs-dark"
-                path={id}
-                language={lang}
-                defaultValue={val}
-                value={editorVal}
-                onChange={(value) => editorHandleChange(value, id,lang)}
-                onMount={handleEditorDidMount}
-            />
+        <div
+            className="flex flex-col relative max-w-full h-[100dvh]"
+            ref={containerRef}
+        >
+            <p style={{ backgroundColor: "#1f1f1f", color: "#fff", paddingBlockEnd: "1em", paddingInlineStart: "1em" }}>{title}</p>
+            <div
+                ref={refRight}
+                className="absolute h-full right-0 top-0 w-2 cursor-col-resize z-10"
+            >
+
+            </div>
+                <Editor
+                    height="100%"
+                    width="100%"
+                    theme="vs-dark"
+                    path={id}
+                    language={lang}
+                    defaultValue={val}
+                    value={editorVal}
+                    onChange={(value) => editorHandleChange(value, id, lang)}
+                    onMount={handleEditorDidMount}
+                />
         </div>
     );
 };

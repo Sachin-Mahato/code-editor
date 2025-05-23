@@ -6,8 +6,6 @@ export default function useResize(
     rightSide: React.RefObject<HTMLDivElement | null>
 ): void {
 
-
-
     useEffect(() => {
         const resizable = container?.current;
         if (!resizable) return;

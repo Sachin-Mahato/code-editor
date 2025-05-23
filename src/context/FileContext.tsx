@@ -13,7 +13,7 @@ type htmlFile = {
     fileId: string,
     fileName: string,
     language: string,
-    content: string,
+    content: string
     isOpen: boolean,
 }
 
