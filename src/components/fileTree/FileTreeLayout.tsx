@@ -5,6 +5,7 @@ import FileExplorer from "./FileExplorer";
 
 export const FileTreeLayout = () => {
     const { fileList,htmlFiles } = useFileContext()
+    
     return (
         <div className="grid grid-cols-[auto_2fr_1fr] grid-rows-1">
             <FileExplorer />
@@ -12,15 +13,15 @@ export const FileTreeLayout = () => {
             {
                 Array.isArray(fileList) && fileList.length > 0 ?
                     fileList.map(file => (
-                        file.isOpen ?
+                        file.isOpen ?   
                             <Workspace
                                 key={file.fileId}
-                                title={file.fileName}
                                 id={file.fileId}
                                 lang={file.language}
                                 val={file.content}
                             />
                             : []
+                            
                     )) : []
             }
             <section role="region" aria-label="Live Preview">

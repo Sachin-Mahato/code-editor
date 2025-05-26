@@ -1,5 +1,6 @@
 import React, { ReactNode, useState } from "react";
 import { fileTreeContext } from "./fileTreeContext";
+import makeActiveByName from "../utils/utils";
 
 type File = {
     fileId: string,
@@ -39,80 +40,72 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
 
     const toggleFileActiveState = (e: React.MouseEvent<HTMLDivElement>, name: string) => {
         e.stopPropagation()
-        setFileList(prev => prev.map((ele) =>
-            ele.fileName.toLowerCase().trim() === name.toLowerCase().trim() ? { ...ele, isOpen: !ele.isOpen } : { ...ele, isOpen: false }))
-
-        setHtmlFiles(prev => prev.map((ele) =>
-            ele.fileName.toLowerCase().trim() === name.toLowerCase().trim() ? { ...ele, isOpen: !ele.isOpen } : { ...ele, isOpen: false }))
-        setCssFiles(prev => prev.map((ele) =>
-            ele.fileName.toLowerCase().trim() === name.toLowerCase().trim() ? { ...ele, isOpen: !ele.isOpen } : { ...ele, isOpen: false }))
+        setFileList(prev => makeActiveByName(prev, name))
+        setHtmlFiles(prev => makeActiveByName(prev, name))
+        setCssFiles(prev => makeActiveByName(prev, name))
         setEditorVal("");
     };
+
+    const onTabClick = (e: React.MouseEvent<HTMLParagraphElement | null>): void => {
+        const value = e.target as HTMLElement;
+        const tabText = value.innerText;
+        setFileList(prev => makeActiveByName(prev, tabText));
+        setEditorVal("");
+    }
 
     const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         setFileInputValue(e.target.value.trim().toLowerCase());
 
     const addFileToList = (input: string) => {
-        if (input.trim() && input.length > 1) {
-            const inputVal = input.trim().toLocaleLowerCase();
-            const dot = inputVal.lastIndexOf(".");
-            const inputLang = inputVal.substring(dot + 1, inputVal.length);
-            const value: File = {
-                fileId: generateUniqueId(),
-                fileName: inputVal,
-                language: inputLang,
-                content: "",
-                isOpen: false,
-            };
-            setFileList((prev) => [...prev, value]);
-            if (inputLang === "html") {
-                const htmlData: htmlFile = {
-                    fileId: generateUniqueId(),
-                    fileName: inputVal,
-                    language: inputLang,
-                    content: "",
-                    isOpen: false
-                };
-                setHtmlFiles(prev => [...prev, htmlData]);
-            }
-            if (inputLang === "css") {
-                const cssData: cssFile = {
-                    fileId: generateUniqueId(),
-                    fileName: inputVal,
-                    language: inputLang,
-                    content: "",
-                    isOpen: false
-                };
-                setCssFiles(prev => [...prev, cssData]);
-            }
-            setFileInputValue("");
+        const name = input.trim().toLowerCase();
+
+        if (name.length < 2) {
+            return;
         }
+        // extract extension
+        const dot = name.lastIndexOf(".");
+        const language = dot !== -1 ? name.slice(dot + 1) : "";
+        const newFile = {
+            fileId: generateUniqueId(),
+            fileName: name,
+            language,
+            content: "",
+            isOpen: false,
+        }
+
+        setFileList(prev => [...prev, newFile]);
+
+        if (language === "html") {
+            setHtmlFiles((prev: htmlFile[]) => [...prev, newFile]);
+        } else if (language === "css") {
+            setCssFiles((prev: cssFile[]) => [...prev, newFile]);
+        }
+
+        setFileInputValue("");
     };
 
-    const editorHandleChange = (val: string | undefined, id: string, lang: string) => {
+    function editorHandleChange(val: string | undefined, id: string, lang: string) {
         if (val !== undefined) {
             setEditorVal(val);
-            setFileList(prev => prev.map(ele => {
-                if (ele.fileId === id) {
-                    return { ...ele, content: val }
-                }
-                return ele;
-            }));
+            const updater = (files: File[]) => files.map(file =>
+                file.fileId === id ? { ...file, content: val } : file);
+            setFileList(updater);
 
             if (lang === "html") {
-                setHtmlFiles(prev => prev.map(ele => ({ ...ele, content: val})))
+                setHtmlFiles(prev => prev.map(ele => ({ ...ele, content: val })));
+                // useDebounce(updateHtmlFileContent,500);
+                // setHtmlFiles(updater);
             }
 
             if (lang === "css") {
-                setCssFiles(prev => prev.map(f => ({...f, content: val})))
+                setCssFiles(prev => prev.map(f => ({ ...f, content: val })));
+                // setCssFiles(updater);
             }
         }
-        // find style is exist or not in the html
 
-        // const findHref = /<link[^>]*href="([^"]+\.css)"[^>]*>/;
-        // const match = str.match(findHref)
+    }
 
-    };
+
 
     const checkIfFileClicked = (name: string) =>
         fileList.some(file => file.fileName === name.toLowerCase().trim()) ? setIsFileClick(true) : setIsFileClick(false)
@@ -133,6 +126,7 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
                 toggleFileActiveState,
                 addFileToList,
                 editorHandleChange,
+                onTabClick,
             }}
         >
             {children}

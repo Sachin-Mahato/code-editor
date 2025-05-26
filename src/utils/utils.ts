@@ -1,12 +1,9 @@
-export const uniqueId = (() => {
-    function* uniqueIdGenerator(): Generator<number, void, unknown> {
-        let id: number = Date.now();
+export default function makeActiveByName<T extends {fileName: string}>(files:T[],name:string): T[] {
+    const lowerName = name.toLowerCase().trim();
 
-        while (true) {
-            yield id++;
-        }
-    }
-    const gen: Generator<number, void, unknown> = uniqueIdGenerator();
-
-    return (): number => gen.next().value as number;
-})();
+    return files.map(f => (
+        f.fileName.toLowerCase().trim() === lowerName
+        ? {...f, isOpen: true}
+        : {...f, isOpen: false}
+    ))
+}

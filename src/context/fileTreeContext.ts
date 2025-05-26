@@ -40,6 +40,7 @@ interface FileTreeContextType {
     addFileToList: (input: string) => void;
     toggleFileActiveState: (e:React.MouseEvent<HTMLDivElement>, name: string) => void;
     editorHandleChange: (val: string | undefined, id: string, lang: string) => void;
+    onTabClick: (e:React.MouseEvent<HTMLParagraphElement>) => void;
 }
 
 export const fileTreeContext = createContext<FileTreeContextType | null>(null)
