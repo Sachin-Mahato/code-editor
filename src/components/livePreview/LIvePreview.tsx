@@ -1,34 +1,21 @@
-import { useEffect } from "react"
 import useFileContext from "../../hooks/useFileContext";
+import useAppend from "../../hooks/useAppend";
+import { useRef } from "react";
 
 interface Preview {
     htmlValue: string
 }
 const LivePreview = ({ htmlValue }: Preview) => {
+    const prevRef = useRef<HTMLDivElement | null>(null);
     const { cssFiles } = useFileContext();
+    useAppend(cssFiles,prevRef);
 
-    useEffect(() => {
-        const isActive = cssFiles.some(f => f.isOpen);
-        if (!isActive) {
-            return;
-        }
-        const container = document.querySelector('[role="preview"]');
-        if (!container) return;
-
-        const style = document.createElement("style");
-        style.textContent = cssFiles.map(ele => ele.content).join("");
-        container.appendChild(style);
-
-        // Remove only the style element on cleanup
-        return () => {
-            container.removeChild(style);
-        };
-    }, [cssFiles]);
 
     return (
         <section
             className="w-full h-full"
             role="preview"
+            ref={prevRef}
         >
             <div>
 

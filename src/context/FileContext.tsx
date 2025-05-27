@@ -1,39 +1,16 @@
 import React, { ReactNode, useState } from "react";
 import { fileTreeContext } from "./fileTreeContext";
 import makeActiveByName from "../utils/utils";
-
-type File = {
-    fileId: string,
-    fileName: string,
-    language: string,
-    content: string,
-    isOpen: boolean,
-}
-
-type htmlFile = {
-    fileId: string,
-    fileName: string,
-    language: string,
-    content: string
-    isOpen: boolean,
-}
-
-type cssFile = {
-    fileId: string,
-    fileName: string,
-    language: string,
-    content: string,
-    isOpen: boolean,
-}
+import { cssFileType, FileType, htmlFileType } from "../types/types";
 
 const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     const [fileInputValue, setFileInputValue] = useState("")
     const [isFileClickIcon, setIsFileClickIcon] = useState(false)
     const [isFileClick, setIsFileClick] = useState(false)
-    const [fileList, setFileList] = useState<File[]>([]);
+    const [fileList, setFileList] = useState<FileType[]>([]);
     const [editorVal, setEditorVal] = useState("");
-    const [htmlFiles, setHtmlFiles] = useState<htmlFile[]>([]);
-    const [cssFiles, setCssFiles] = useState<cssFile[]>([]);
+    const [htmlFiles, setHtmlFiles] = useState<htmlFileType[]>([]);
+    const [cssFiles, setCssFiles] = useState<cssFileType[]>([]);
 
     const generateUniqueId = () => crypto.randomUUID();
     const toggleFileIconClick = () => setIsFileClickIcon(prev => !prev)
@@ -41,15 +18,15 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     const toggleFileActiveState = (e: React.MouseEvent<HTMLDivElement>, name: string) => {
         e.stopPropagation()
         setFileList(prev => makeActiveByName(prev, name))
-        setHtmlFiles(prev => makeActiveByName(prev, name))
-        setCssFiles(prev => makeActiveByName(prev, name))
+        setHtmlFiles(prev => makeActiveByName(prev,name))
+        setCssFiles(prev => makeActiveByName(prev,name))
         setEditorVal("");
     };
 
     const onTabClick = (e: React.MouseEvent<HTMLParagraphElement | null>): void => {
         const value = e.target as HTMLElement;
         const tabText = value.innerText;
-        setFileList(prev => makeActiveByName(prev, tabText));
+        setFileList(prev => makeActiveByName(prev,tabText));
         setEditorVal("");
     }
 
@@ -64,7 +41,7 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
         }
         // extract extension
         const dot = name.lastIndexOf(".");
-        const language = dot !== -1 ? name.slice(dot + 1) : "";
+        const language = dot !== -1  ? name.slice(dot+1) : "";
         const newFile = {
             fileId: generateUniqueId(),
             fileName: name,
@@ -76,9 +53,9 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
         setFileList(prev => [...prev, newFile]);
 
         if (language === "html") {
-            setHtmlFiles((prev: htmlFile[]) => [...prev, newFile]);
+            setHtmlFiles((prev: htmlFileType[]) => [...prev, newFile]);
         } else if (language === "css") {
-            setCssFiles((prev: cssFile[]) => [...prev, newFile]);
+            setCssFiles((prev: cssFileType[]) => [...prev, newFile]);
         }
 
         setFileInputValue("");
@@ -87,8 +64,8 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     function editorHandleChange(val: string | undefined, id: string, lang: string) {
         if (val !== undefined) {
             setEditorVal(val);
-            const updater = (files: File[]) => files.map(file =>
-                file.fileId === id ? { ...file, content: val } : file);
+            const updater = (files: FileType[]) => files.map(file => 
+            file.fileId === id ? { ...file, content: val } : file);
             setFileList(updater);
 
             if (lang === "html") {

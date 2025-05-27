@@ -1,39 +1,14 @@
 import React, { createContext } from "react";
-
-
-type File = {
-    fileId: string,
-    fileName: string,
-    language: string,
-    content: string,
-    isOpen: boolean,
-}
-type htmlFile = {
-    fileId: string,
-    fileName: string,
-    language: string,
-    content: string,
-    isOpen: boolean,
-}
-
-type cssFile =  {
-    fileId: string,
-    fileName: string,
-    language: string,
-    content: string,
-    isOpen: boolean,
-}
-
-
+import { cssFileType, FileType, htmlFileType } from "../types/types";
 
 interface FileTreeContextType {
     fileInputValue: string;
-    fileList: File[];
+    fileList: FileType[];
     isFileClickIcon: boolean;
     isFileClick: boolean;
     editorVal: string;
-    htmlFiles: htmlFile[];
-    cssFiles: cssFile[];
+    htmlFiles: htmlFileType[];
+    cssFiles: cssFileType[];
     handleFileInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     checkIfFileClicked: (name: string) => void;
     toggleFileIconClick: () => void;

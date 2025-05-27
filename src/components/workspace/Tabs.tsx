@@ -5,7 +5,6 @@ import { CrossIcon } from "../icons"
 export default function Tabs(): JSX.Element {
     const { fileList, onTabClick } = useFileContext();
 
-    console.log(fileList)
     return (
         <section className="flex gap-6 items-center bg-[#1f1f1f] ">
             {
@@ -14,8 +13,7 @@ export default function Tabs(): JSX.Element {
                     className="flex gap-2 items-center"
                     >
                         <p
-                            style={{ backgroundColor: "#1f1f1f" }}
-                            className="cursor-pointer, text-white ml-4   "
+                            className={`cursor-pointer bg-[#1f1f1f] ml-4 ${file.isOpen ? "text-[#ddc190]" : "text-white"}`}
                             onClick={onTabClick}
                         >{file.fileName}</p>
                         <CrossIcon strokeClr="" fillClr="white" size={20} />
