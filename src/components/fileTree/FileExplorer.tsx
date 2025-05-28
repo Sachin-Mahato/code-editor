@@ -12,7 +12,7 @@ export default function FileExplorer() {
         <aside
             ref={refAside}
             className="relative bg-[#181818] max-w-full h-[100dvh] text-white"
-            style={{ width: 300 }} // initial width
+            style={{ width: 300 }} 
         >
             {/* Right resize handle */}
             <div ref={refRight} className="absolute h-full w-2 right-0 top-0 cursor-col-resize z-10" />

@@ -9,6 +9,7 @@ interface FileTreeContextType {
     editorVal: string;
     htmlFiles: htmlFileType[];
     cssFiles: cssFileType[];
+    tabs: FileType[];
     handleFileInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     checkIfFileClicked: (name: string) => void;
     toggleFileIconClick: () => void;
@@ -16,6 +17,7 @@ interface FileTreeContextType {
     toggleFileActiveState: (e:React.MouseEvent<HTMLDivElement>, name: string) => void;
     editorHandleChange: (val: string | undefined, id: string, lang: string) => void;
     onTabClick: (e:React.MouseEvent<HTMLParagraphElement>) => void;
+    tabCloseHandler: (name:string) => void
 }
 
 export const fileTreeContext = createContext<FileTreeContextType | null>(null)

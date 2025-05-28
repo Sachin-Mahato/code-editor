@@ -3,7 +3,6 @@ import FileNameInput from "./FileNameInput";
 import { FileListItem } from "./FileListItem";
 export const FileList = () => {
     const { isFileClickIcon, fileList} = useFileContext()
-
     return (
         <section className="mt-4 text-sm ">
             {Array.isArray(fileList) && fileList.length > 0

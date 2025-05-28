@@ -4,15 +4,15 @@ import Workspace from "../workspace/Workspace";
 import FileExplorer from "./FileExplorer";
 
 export const FileTreeLayout = () => {
-    const { fileList,htmlFiles } = useFileContext()
+    const { tabs,htmlFiles } = useFileContext()
     
     return (
         <div className="grid grid-cols-[auto_2fr_1fr] grid-rows-1">
             <FileExplorer />
 
             {
-                Array.isArray(fileList) && fileList.length > 0 ?
-                    fileList.map(file => (
+                Array.isArray(tabs) && tabs.length > 0 ?
+                    tabs.map(file => (
                         file.isOpen ?   
                             <Workspace
                                 key={file.fileId}

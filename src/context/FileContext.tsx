@@ -1,7 +1,8 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { fileTreeContext } from "./fileTreeContext";
-import makeActiveByName from "../utils/utils";
+import makeActiveByName, { updater } from "../utils/utils";
 import { cssFileType, FileType, htmlFileType } from "../types/types";
+import { generateUniqueId } from "../utils/utils";
 
 const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     const [fileInputValue, setFileInputValue] = useState("")
@@ -11,8 +12,8 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     const [editorVal, setEditorVal] = useState("");
     const [htmlFiles, setHtmlFiles] = useState<htmlFileType[]>([]);
     const [cssFiles, setCssFiles] = useState<cssFileType[]>([]);
+    const [tabs,setTabs] = useState<FileType[]>(fileList);
 
-    const generateUniqueId = () => crypto.randomUUID();
     const toggleFileIconClick = () => setIsFileClickIcon(prev => !prev)
 
     const toggleFileActiveState = (e: React.MouseEvent<HTMLDivElement>, name: string) => {
@@ -23,12 +24,6 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
         setEditorVal("");
     };
 
-    const onTabClick = (e: React.MouseEvent<HTMLParagraphElement | null>): void => {
-        const value = e.target as HTMLElement;
-        const tabText = value.innerText;
-        setFileList(prev => makeActiveByName(prev,tabText));
-        setEditorVal("");
-    }
 
     const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         setFileInputValue(e.target.value.trim().toLowerCase());
@@ -64,28 +59,37 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     function editorHandleChange(val: string | undefined, id: string, lang: string) {
         if (val !== undefined) {
             setEditorVal(val);
-            const updater = (files: FileType[]) => files.map(file => 
-            file.fileId === id ? { ...file, content: val } : file);
-            setFileList(updater);
+            setFileList(prev => updater(prev,id,val));
 
             if (lang === "html") {
                 setHtmlFiles(prev => prev.map(ele => ({ ...ele, content: val })));
-                // useDebounce(updateHtmlFileContent,500);
-                // setHtmlFiles(updater);
             }
 
             if (lang === "css") {
                 setCssFiles(prev => prev.map(f => ({ ...f, content: val })));
-                // setCssFiles(updater);
             }
         }
 
     }
 
 
-
     const checkIfFileClicked = (name: string) =>
         fileList.some(file => file.fileName === name.toLowerCase().trim()) ? setIsFileClick(true) : setIsFileClick(false)
+
+    const onTabClick = (e: React.MouseEvent<HTMLParagraphElement | null>): void => {
+        const value = e.target as HTMLElement;
+        const tabText = value.innerText;
+        setFileList(prev => makeActiveByName(prev,tabText));
+        setEditorVal("");
+    }
+    const tabCloseHandler = (name: string) => {
+        setTabs(prev => prev.filter(f => name !== f.fileName));
+    }
+
+    useEffect(() => {
+        setTabs(fileList)
+    },[fileList])
+
 
     return (
         <fileTreeContext.Provider
@@ -97,6 +101,7 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
                 editorVal,
                 htmlFiles,
                 cssFiles,
+                tabs,
                 checkIfFileClicked,
                 handleFileInputChange,
                 toggleFileIconClick,
@@ -104,6 +109,7 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
                 addFileToList,
                 editorHandleChange,
                 onTabClick,
+                tabCloseHandler,
             }}
         >
             {children}
