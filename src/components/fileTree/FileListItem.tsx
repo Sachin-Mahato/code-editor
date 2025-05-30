@@ -1,7 +1,7 @@
 import useFileContext from "../../hooks/useFileContext";
 
 export const FileListItem = ({ name}: { name: string  }) => {
-    const {toggleFileActiveState,fileList,tabs } = useFileContext()
+    const {toggleFileActiveState,} = useFileContext()
 
     
     return (
@@ -9,8 +9,6 @@ export const FileListItem = ({ name}: { name: string  }) => {
             <div className="" 
             onClick={(e) => {
                 toggleFileActiveState(e,name)
-                console.log(fileList);
-                console.log(tabs);
                 
                 
             }}

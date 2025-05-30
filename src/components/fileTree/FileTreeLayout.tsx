@@ -5,7 +5,7 @@ import FileExplorer from "./FileExplorer";
 
 export const FileTreeLayout = () => {
     const { tabs,htmlFiles } = useFileContext()
-    
+        
     return (
         <div className="grid grid-cols-[auto_2fr_1fr] grid-rows-1">
             <FileExplorer />

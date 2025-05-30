@@ -1,14 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function useDebounce(fn: unknown, delay: number) {
-    if (typeof fn !== "function") {
-        throw new TypeError("fn must be a function");
-    }
+export default function useDebounce<T>(value: T, delay = 500) {
+    const [debounceValue, setDebounceValue] = useState(value);
     useEffect(() => {
         const id = setTimeout(() => {
-           fn(); 
-        },delay)
+            setDebounceValue(value);
+        }, delay);
 
-        return () => clearTimeout(id)
-    },[fn,delay])
+        return () => clearTimeout(id);
+    }, [value, delay]);
+
+    return debounceValue;
 }
