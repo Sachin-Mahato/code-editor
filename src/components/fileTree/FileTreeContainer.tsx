@@ -3,10 +3,16 @@ import { FileTreeLayout } from "./FileTreeLayout"
 
 const FileTreeContainer = () => {
     return (
-        <FileTreeContextProvider>
+        <div
+            role="region"
+            aria-label="File Tree Container"
+            data-testid="file-tree-container">
 
-            <FileTreeLayout />
-        </FileTreeContextProvider>
+            <FileTreeContextProvider >
+
+                <FileTreeLayout />
+            </FileTreeContextProvider>
+        </div>
     )
 }
 

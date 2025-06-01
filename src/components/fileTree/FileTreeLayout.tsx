@@ -1,5 +1,5 @@
 import useFileContext from "../../hooks/useFileContext";
-import LivePreview from "../livePreview/LIvePreview";
+import LivePreview from "../livePreview/LivePreview";
 import Workspace from "../workspace/Workspace";
 import FileExplorer from "./FileExplorer";
 
@@ -7,7 +7,12 @@ export const FileTreeLayout = () => {
     const { tabs,htmlFiles } = useFileContext()
         
     return (
-        <div className="grid grid-cols-[auto_2fr_1fr] grid-rows-1">
+        <div
+            role="region"
+            aria-label="File Tree Layout"
+            data-testid="file-tree-layout" 
+            className="grid grid-cols-[auto_2fr_1.5fr] grid-rows-1"
+         >
             <FileExplorer />
 
             {

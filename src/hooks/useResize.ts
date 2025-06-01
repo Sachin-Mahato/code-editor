@@ -1,6 +1,5 @@
 import React, {useEffect} from "react"
 
-
 export default function useResize(
     container: React.RefObject<HTMLDivElement | null>, 
     rightSide: React.RefObject<HTMLDivElement | null>

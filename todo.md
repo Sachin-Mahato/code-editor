@@ -3,5 +3,5 @@
 ---
 
 - Tabs -> done 
-- Debouncing
+- Debouncing -> done
 - Testing

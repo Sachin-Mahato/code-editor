@@ -1,31 +1,24 @@
 import useFileContext from "../../hooks/useFileContext";
 import useAppend from "../../hooks/useAppend";
-import { useRef } from "react";
+import React, { useRef } from "react";
 
 interface Preview {
-    htmlValue: string
+    htmlValue: string;
 }
-const LivePreview = ({ htmlValue }: Preview) => {
+
+const LivePreview: React.FC<Preview> = ({ htmlValue }) => {
     const prevRef = useRef<HTMLDivElement | null>(null);
     const { cssFiles } = useFileContext();
-    useAppend(cssFiles,prevRef);
-
-
+    useAppend(htmlValue, cssFiles, prevRef);
     return (
         <section
-            className="w-full h-full"
+            className="max-w-full h-full"
             role="preview"
             ref={prevRef}
         >
-            <div>
-
-                <div
-                    dangerouslySetInnerHTML={{ __html: htmlValue }}
-
-                ></div>
-            </div>
+            {/* Content will be rendered in shadow DOM, nothing needed here */}
         </section>
-    )
-}
+    );
+};
 
 export default LivePreview;
