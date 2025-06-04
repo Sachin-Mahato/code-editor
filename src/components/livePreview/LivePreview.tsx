@@ -10,6 +10,7 @@ const LivePreview: React.FC<Preview> = ({ htmlValue }) => {
     const prevRef = useRef<HTMLDivElement | null>(null);
     const { cssFiles } = useFileContext();
     useAppend(htmlValue, cssFiles, prevRef);
+    
     return (
         <section
             className="max-w-full h-full"

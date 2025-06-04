@@ -17,10 +17,6 @@ export default function useAppend(
         }
         shadow.innerHTML = htmlValue;
 
-        const isActive = cssFiles.some((f) => f.isOpen);
-        if (!isActive) {
-            return;
-        }
         const container = shadow;
         if (!container) return;
 

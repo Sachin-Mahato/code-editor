@@ -4,45 +4,50 @@ import Workspace from "../workspace/Workspace";
 import FileExplorer from "./FileExplorer";
 
 export const FileTreeLayout = () => {
-    const { tabs,htmlFiles } = useFileContext()
-        
+    const { tabs, htmlFiles } = useFileContext()
+
     return (
         <div
             role="region"
             aria-label="File Tree Layout"
-            data-testid="file-tree-layout" 
-            className="grid grid-cols-[auto_2fr_1.5fr] grid-rows-1"
-         >
-            <FileExplorer />
+            className="grid grid-cols-[auto_1fr] h-screen w-full"
+        >
+            {/* Left Panel: Explore */}
+            <aside >
+                <FileExplorer />
+            </aside>
 
-            {
-                Array.isArray(tabs) && tabs.length > 0 ?
-                    tabs.map(file => (
-                        file.isOpen ?   
-                            <Workspace
-                                key={file.fileId}
-                                id={file.fileId}
-                                lang={file.language}
-                                val={file.content}
-                            />
-                            : []
-                            
-                    )) : []
-            }
-            <section role="region" aria-label="Live Preview">
-                {
+            {/* Right Panel: Workspace + Live Preview */}
+            <div className="grid grid-rows-[1fr_1fr]">
+                {/* Top: Workspace */}
+                <section className="overflow-auto">
+                    {Array.isArray(tabs) && tabs.length > 0 &&
+                        tabs.map(file =>
+                            file.isOpen ? (
+                                <Workspace
+                                    key={file.fileId}
+                                    id={file.fileId}
+                                    lang={file.language}
+                                    val={file.content}
+                                />
+                            ) : null
+                        )
+                    }
+                </section>
 
-                    htmlFiles.length > 0 ?
+                {/* Bottom: Live Preview */}
+                <section role="region" aria-label="Live Preview" className="overflow-auto ">
+                    {htmlFiles.length > 0 &&
                         htmlFiles.map(file => (
                             <LivePreview
                                 key={file.fileId}
                                 htmlValue={file.content}
                             />
                         ))
-                        : []
-
-                }
-            </section>
+                    }
+                </section>
+            </div>
         </div>
+
     );
 };

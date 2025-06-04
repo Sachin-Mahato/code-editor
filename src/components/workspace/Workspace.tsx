@@ -34,27 +34,31 @@ const Workspace = ({ id, lang, val }: WorkspaceProps) => {
 
     return (
         <div
-            className="flex flex-col relative max-w-full h-[100dvh]"
+            className="grid grid-rows-[10%_90%] w-full h-full bg-[#1e1e1e]" // default vs-dark background
             ref={containerRef}
         >
-            <Tabs />
-            <div
-                ref={refRight}
-                className="absolute h-full right-0 top-0 w-2 cursor-col-resize z-10"
-            />
+            {/* Tabs area */}
+            <div className="overflow-hidden bg-[#1e1e1e]"> {/* Match background */}
+                <Tabs />
+            </div>
 
-            <Editor
-                height="100%"
-                width="100%"
-                theme="vs-dark"
-                path={id}
-                language={lang}
-                defaultValue={val}
-                value={editorVal}
-                onChange={(value) => editorHandleChange(value, id, lang)}
-                onMount={handleEditorDidMount}
-            />
+            {/* Editor area */}
+            <div className="relative w-full h-full bg-[#1e1e1e]">
+                <Editor
+                    height="100%"
+                    width="100%"
+                    theme="vs-dark"
+                    path={id}
+                    language={lang}
+                    defaultValue={val}
+                    value={editorVal}
+                    onChange={(value) => editorHandleChange(value, id, lang)}
+                    onMount={handleEditorDidMount}
+                />
+            </div>
         </div>
+
+
     );
 };
 

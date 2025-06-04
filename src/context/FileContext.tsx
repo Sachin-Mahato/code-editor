@@ -2,16 +2,17 @@ import React, { ReactNode, useEffect, useState, useCallback } from "react";
 import { fileTreeContext } from "./fileTreeContext";
 import makeActiveByName, { debounce, updater } from "../utils/utils";
 import { cssFileType, FileType, htmlFileType } from "../types/types";
-import { generateUniqueId } from "../utils/utils";
+import { generateUniqueId,htmlDefaultValue,fileDefaultValue,cssDefaultValue } from "../utils/utils";
+
 
 const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
     const [fileInputValue, setFileInputValue] = useState("")
     const [isFileClickIcon, setIsFileClickIcon] = useState(false)
     const [isFileClick, setIsFileClick] = useState(false)
-    const [fileList, setFileList] = useState<FileType[]>([]);
+    const [fileList, setFileList] = useState<FileType[]>([...fileDefaultValue]);
     const [editorVal, setEditorVal] = useState("");
-    const [htmlFiles, setHtmlFiles] = useState<htmlFileType[]>([]);
-    const [cssFiles, setCssFiles] = useState<cssFileType[]>([]);
+    const [htmlFiles, setHtmlFiles] = useState<htmlFileType[]>([...htmlDefaultValue]);
+    const [cssFiles, setCssFiles] = useState<cssFileType[]>([...cssDefaultValue]);
     const [tabs, setTabs] = useState<FileType[]>(fileList);
 
     const toggleFileIconClick = () => setIsFileClickIcon(prev => !prev)
@@ -100,7 +101,6 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
         // sync with fileList
         setTabs(fileList)
     }, [fileList])
-
 
 
 

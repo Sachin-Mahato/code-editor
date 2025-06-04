@@ -9,7 +9,7 @@ export default function FileExplorer() {
     useResize(refAside, refRight);
 
     return (
-        <aside
+        <div
             ref={refAside}
             className="relative bg-[#181818] max-w-full h-[100dvh] text-white"
             style={{ width: 300 }} 
@@ -32,6 +32,6 @@ export default function FileExplorer() {
                     <FileList />
                 </div>
             </div>
-        </aside>
+        </div>
     );
 }

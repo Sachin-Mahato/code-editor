@@ -1,10 +1,9 @@
-import React, {useEffect} from "react"
+import React, { useEffect } from "react";
 
 export default function useResize(
-    container: React.RefObject<HTMLDivElement | null>, 
-    rightSide: React.RefObject<HTMLDivElement | null>
+    container: React.RefObject<HTMLDivElement | null>,
+    rightSide: React.RefObject<HTMLDivElement | null>,
 ): void {
-
     useEffect(() => {
         const resizable = container?.current;
         if (!resizable) return;
@@ -43,5 +42,4 @@ export default function useResize(
             }
         };
     }, [container, rightSide]);
-        
 }
