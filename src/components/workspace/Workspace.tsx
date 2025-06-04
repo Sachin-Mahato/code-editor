@@ -30,15 +30,13 @@ const Workspace = ({ id, lang, val }: WorkspaceProps) => {
 
     useResize(containerRef, refRight);
 
-
-
     return (
         <div
             className="grid grid-rows-[10%_90%] w-full h-full bg-[#1e1e1e]" // default vs-dark background
             ref={containerRef}
         >
             {/* Tabs area */}
-            <div className="overflow-hidden bg-[#1e1e1e]"> {/* Match background */}
+            <div className="overflow-hidden bg-[#1e1e1e]">
                 <Tabs />
             </div>
 

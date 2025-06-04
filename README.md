@@ -16,6 +16,7 @@ A web-based HTML and CSS playground—no need to install any IDE or editor!
 
 - Persistent data (save your work)
 - Multiple file and folder support
+- JavaScript
 
 ## Installation
 

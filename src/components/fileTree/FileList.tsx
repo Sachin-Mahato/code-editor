@@ -1,6 +1,7 @@
 import useFileContext from "../../hooks/useFileContext";
-import FileNameInput from "./FileNameInput";
+// import FileNameInput from "./FileNameInput";
 import { FileListItem } from "./FileListItem";
+import Model from "../Model"
 export const FileList = () => {
     const { isFileClickIcon, fileList} = useFileContext()
     
@@ -18,7 +19,7 @@ export const FileList = () => {
                   ))
                 : []}
 
-            {isFileClickIcon ? <FileNameInput /> : null}
+            {isFileClickIcon ? <Model title="Upcoming feature"/> : null}
         </section>
     )
 }

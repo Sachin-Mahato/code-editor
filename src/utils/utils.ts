@@ -48,7 +48,7 @@ export const fileDefaultValue: FileType[] = [
         content: `<div class="welcome-message">
   <h1>Welcome!</h1>
   <p>
-    We're glad you're here. Take a look around and let us know if you run into any issues.
+    We're glad you're here. This project is currently in development, so let us know if you encounter any issues.
   </p>
   <div class="contact-us">
     <p>Contact us:</p>
@@ -117,7 +117,7 @@ export const htmlDefaultValue: htmlFileType[] = [
         content: `<div class="welcome-message">
   <h1>Welcome!</h1>
   <p>
-    We're glad you're here. Take a look around and let us know if you run into any issues.
+    We're glad you're here. This project is currently in development, so let us know if you encounter any issues.
   </p>
   <div class="contact-us">
     <p>Contact us:</p>
