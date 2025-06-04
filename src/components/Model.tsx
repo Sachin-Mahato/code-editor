@@ -12,7 +12,7 @@ export default function Model({ title }: ModelProps) {
 
                 <div className="bg-indigo-600 rounded-xl px-20 py-10 flex flex-col gap-5 items-center mx-4">
                     <h1 className="text-3xl font-extrabold">{title}</h1>
-                    <p className="font-bold max-w-md text-center">This feature in development and will be available soon</p>
+                    <p className="font-bold max-w-md text-center">This feature is in development and will be available soon.</p>
                     <button
                         onClick={toggleFileIconClick}
                     >
