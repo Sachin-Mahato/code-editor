@@ -28,7 +28,7 @@ A web-based HTML and CSS playground—no need to install any IDE or editor!
 ### Steps
 
 ```sh
-pnpm install
+pnpm add
 # or
 npm install
 ```
