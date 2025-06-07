@@ -36,7 +36,7 @@ npm install
 ## Usage
 
 ```sh
-pnpm dev
+pnpm install
 # or
 npm run dev
 ```
