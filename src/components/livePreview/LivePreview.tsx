@@ -1,24 +1,31 @@
 import useFileContext from "../../hooks/useFileContext";
-import useAppend from "../../hooks/useAppend";
-import React, { useRef } from "react";
-
 interface Preview {
     htmlValue: string;
 }
 
-const LivePreview: React.FC<Preview> = ({ htmlValue }) => {
-    const prevRef = useRef<HTMLDivElement | null>(null);
+const LivePreview = ({ htmlValue }: Preview) => {
     const { cssFiles } = useFileContext();
-    useAppend(htmlValue, cssFiles, prevRef);
-    
+    const css = cssFiles.map((f) => f.content).join("\n");
+
+    // Inject CSS into a <style> tag in the <head>
+    const srcDoc = `
+        <html>
+            <head>
+                <style>${css}</style>
+            </head>
+            <body>
+                ${htmlValue}
+            </body>
+        </html>
+    `;
+
     return (
-        <section
-            className="max-w-full h-full"
-            role="preview"
-            ref={prevRef}
-        >
-            {/* Content will be rendered in shadow DOM, nothing needed here */}
-        </section>
+        <iframe
+            title="Live Preview"
+            style={{ width: "100%", height: "100%", border: "none" }}
+            srcDoc={srcDoc}
+            sandbox="allow-scripts allow-same-origin"
+        />
     );
 };
 
