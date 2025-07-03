@@ -179,3 +179,17 @@ export const cssDefaultValue: cssFileType[] = [
         isOpen: false,
     },
 ];
+
+
+export function isValidString(str: string):boolean {
+  const match = /^[A-Za-z][A-Za-z\s]*$/;
+
+  const value = str.trim();
+   
+    if(!match.test(value)){
+      return false;
+    }
+  return true;
+}
+
+isValidString("Hello")
