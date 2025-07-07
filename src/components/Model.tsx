@@ -1,11 +1,11 @@
 import { CrossIcon } from "./icons"
-import useFileContext from "../hooks/useFileContext"
+import useFileContext from "@/hooks/useFileContext"
 
 type ModelProps = {
     title: string
 }
 export default function Model({ title }: ModelProps) {
-    const{toggleFileIconClick} = useFileContext();
+    const { toggleFileIconClick } = useFileContext();
     return (
         <div className="fixed top-28 left-0 right-0 bottom-0 opacity-100  backdrop-blur-sm flex justify-center items-center">
             <div className="mt-10 flex flex-col gap-5 text-white">

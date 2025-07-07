@@ -1,5 +1,10 @@
 import { createContext } from "react";
 
-const AuthContext = createContext(null);
+interface AuthContextType {
+    isAuthenticated: boolean;
+    setIsAuthenticated:React.Dispatch<React.SetStateAction<boolean>> 
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export default AuthContext;

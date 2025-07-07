@@ -1,75 +1,25 @@
-
-
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import { Code2, Zap, Eye, Palette, Save, Users, Star, ArrowRight, Play, Lock } from "lucide-react"
-
-// // Mock authentication state - replace with your actual auth logic
-// const useAuth = () => {
-//   const [isAuthenticated, setIsAuthenticated] = useState(false)
-//   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
-
-//   const login = () => {
-//     setIsAuthenticated(true)
-//     setUser({ name: "John Doe", email: "john@example.com" })
-//   }
-
-//   const logout = () => {
-//     setIsAuthenticated(false)
-//     setUser(null)
-//   }
-
-//   return { isAuthenticated, user, login, logout }
-// }
+import { Code2, ArrowRight, Play, Lock } from "lucide-react"
+import { Link } from "react-router"
+import useAuth from "@/hooks/useAuth"
+import { useFeatures } from "@/hooks/useFeatures"
+import useStorage from "@/hooks/useStorage"
+import useUserDetails from "@/hooks/useUserDetails"
 
 export default function LandingPage() {
-    const { isAuthenticated, user, login, logout } = useAuth()
     const [showTryModal, setShowTryModal] = useState(false)
-
-    const features = [
-        {
-            icon: <Code2 className="h-6 w-6" />,
-            title: "Syntax Highlighting",
-            description: "Beautiful syntax highlighting for HTML and CSS with theme support",
-        },
-        {
-            icon: <Zap className="h-6 w-6" />,
-            title: "Smart Autocomplete",
-            description: "Intelligent code completion that speeds up your development workflow",
-        },
-        {
-            icon: <Eye className="h-6 w-6" />,
-            title: "Live Preview",
-            description: "See your changes instantly with real-time preview functionality",
-        },
-        {
-            icon: <Palette className="h-6 w-6" />,
-            title: "Multi-Language Support",
-            description: "Currently supporting HTML and CSS with more languages coming soon",
-        },
-    ]
-
-    const benefits = [
-        {
-            icon: <Save className="h-5 w-5" />,
-            title: "Cloud Storage",
-            description: "Save your projects securely in the cloud and access them anywhere",
-        },
-        {
-            icon: <Users className="h-5 w-5" />,
-            title: "Collaboration",
-            description: "Share your projects with team members and collaborate in real-time",
-        },
-        {
-            icon: <Star className="h-5 w-5" />,
-            title: "Premium Features",
-            description: "Access advanced features like custom themes and export options",
-        },
-    ]
+    const { isAuthenticated } = useAuth()
+    const { features, benefits } = useFeatures()
+    const { token } = useStorage()
+    const { userDetails } = useUserDetails(token, isAuthenticated);
+    const username: string =
+        userDetails && userDetails.length > 0
+            ? userDetails[0].username
+            : "";
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -82,31 +32,33 @@ export default function LandingPage() {
                     </div>
 
                     <nav className="hidden md:flex items-center space-x-6">
-                        <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
+                        <Link to="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
                             Features
-                        </a>
-                        <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
+                        </Link>
+                        <Link to="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
                             Pricing
-                        </a>
-                        <a href="#about" className="text-gray-600 hover:text-gray-900 transition-colors">
+                        </Link>
+                        <Link to="#about" className="text-gray-600 hover:text-gray-900 transition-colors">
                             About
-                        </a>
+                        </Link>
                     </nav>
 
                     <div className="flex items-center space-x-3">
-                        {isAuthenticated ? (
+                        {token ? (
                             <div className="flex items-center space-x-3">
-                                <span className="text-sm text-gray-600">Welcome, {user?.name}</span>
-                                <Button variant="outline" onClick={logout}>
+                                <span className="text-sm text-gray-600">Welcome, {username}</span>
+                                <Button variant="outline" >
                                     Logout
                                 </Button>
                             </div>
                         ) : (
                             <div className="flex items-center space-x-2">
-                                <Button variant="ghost" onClick={login}>
-                                    Login
+                                <Button variant="ghost" >
+                                    <Link to="/login">
+                                        Login
+                                    </Link>
                                 </Button>
-                                <Button onClick={login}>Sign Up</Button>
+                                <Button ><Link to="/signup">Sign Up</Link></Button>
                             </div>
                         )}
                     </div>
@@ -137,13 +89,13 @@ export default function LandingPage() {
                             </Button>
                         ) : (
                             <>
-                                <Button size="lg" className="text-lg px-8 py-3" onClick={login}>
+                                <Button size="lg" className="text-lg px-8 py-3 cursor-pointer" >
                                     Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
                                 </Button>
                                 <Button
                                     variant="outline"
                                     size="lg"
-                                    className="text-lg px-8 py-3 bg-transparent"
+                                    className="text-lg px-8 py-3 bg-transparent cursor-pointer"
                                     onClick={() => setShowTryModal(true)}
                                 >
                                     <Play className="mr-2 h-5 w-5" />
@@ -228,16 +180,20 @@ export default function LandingPage() {
 
                     {!isAuthenticated && (
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Button size="lg" variant="secondary" onClick={login}>
-                                Create Free Account
+                            <Button size="lg" variant="secondary" >
+                                <Link to="/signup">
+
+                                    Create Free Account
+                                </Link>
                             </Button>
                             <Button
                                 size="lg"
                                 variant="outline"
                                 className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
-                                onClick={login}
                             >
-                                Sign In
+                                <Link to="/login">
+                                    Sign In
+                                </Link>
                             </Button>
                         </div>
                     )}
@@ -254,15 +210,15 @@ export default function LandingPage() {
                         </div>
 
                         <div className="flex space-x-6 text-sm text-gray-400">
-                            <a href="#" className="hover:text-white transition-colors">
+                            <Link to="#" className="hover:text-white transition-colors">
                                 Privacy Policy
-                            </a>
-                            <a href="#" className="hover:text-white transition-colors">
+                            </Link>
+                            <Link to="#" className="hover:text-white transition-colors">
                                 Terms of Service
-                            </a>
-                            <a href="#" className="hover:text-white transition-colors">
+                            </Link>
+                            <Link to="#" className="hover:text-white transition-colors">
                                 Contact
-                            </a>
+                            </Link>
                         </div>
                     </div>
 
@@ -289,8 +245,11 @@ export default function LandingPage() {
                     </DialogHeader>
 
                     <div className="flex flex-col gap-3 mt-4">
-                        <Button onClick={login} className="w-full">
-                            Create Free Account
+                        <Button className="w-full">
+                            <Link to="/signup">
+
+                                Create Free Account
+                            </Link>
                         </Button>
                         <Button
                             variant="outline"
@@ -309,12 +268,5 @@ export default function LandingPage() {
         </div>
     )
 }
-function useAuth(): { isAuthenticated: any; user: any; login: any; logout: any } {
-    return {
-        isAuthenticated: true,
-        user: 1,
-        login: false,
-        logout: false
-    }
-}
+
 
