@@ -1,8 +1,8 @@
 import React, { ReactNode, useEffect, useState, useCallback } from "react";
-import { fileTreeContext } from "./fileTreeContext";
-import makeActiveByName, { debounce, updater } from "../utils/utils";
-import { cssFileType, FileType, htmlFileType } from "../types/types";
-import { generateUniqueId,htmlDefaultValue,fileDefaultValue,cssDefaultValue } from "../utils/utils";
+import { fileTreeContext } from "@/context/fileTreeContext";
+import makeActiveByName, { debounce, updater } from "@/utils/utils"
+import { cssFileType, FileType, htmlFileType } from "@/types/types";
+import { generateUniqueId, htmlDefaultValue, fileDefaultValue, cssDefaultValue } from "@/utils/utils";
 
 
 const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {

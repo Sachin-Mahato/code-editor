@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Link, useNavigate } from "react-router"
 import React, { useState } from "react"
 import { Loader2 } from "lucide-react"
+import Config from "@/config/config"
 
 export default function SignupForm({
     className,
@@ -25,7 +26,6 @@ export default function SignupForm({
         isEmailValid: false,
     });
     const [isSubmit, setIsSubmit] = useState(false);
-    const url = "http://localhost:8080/register";
     const navigation = useNavigate()
 
     const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +50,7 @@ export default function SignupForm({
         setPassword(e.target.value)
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, username: string, email: string, password: string, url: string): Promise<void> => {
         e.preventDefault()
         const { isNameValid, isEmailValid } = pending;
 
@@ -85,7 +85,7 @@ export default function SignupForm({
     }
     return (
         <form
-            onSubmit={handleSubmit}
+            onSubmit={(e) => handleSubmit(e, username, email, password, Config.registerUrl)}
             className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader>

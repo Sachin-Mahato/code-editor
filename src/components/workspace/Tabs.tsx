@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import useFileContext from "../../hooks/useFileContext"
+import useFileContext from "@/hooks/useFileContext"
 import { CrossIcon } from "../icons"
 
 export default function Tabs(): JSX.Element {

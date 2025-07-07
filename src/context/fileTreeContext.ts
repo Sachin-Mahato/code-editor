@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { cssFileType, FileType, htmlFileType } from "../types/types";
+import { cssFileType, FileType, htmlFileType } from "@/types/types";
 
 interface FileTreeContextType {
     fileInputValue: string;
