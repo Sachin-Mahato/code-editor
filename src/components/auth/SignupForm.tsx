@@ -57,20 +57,18 @@ export default function SignupForm({
         if (isEmailValid && isNameValid) {
             setIsSubmit(true)
         }
+        const request = new Request(
+            url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username: username, email: email, password: password })
+        }
+        );
 
         try {
-            const data = {
-                username: username,
-                email: email,
-                password: password
-            }
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data)
-            })
+            const response = await fetch(request)
             if (!response.ok) {
                 console.log("Failed to send user sign up details " + response.status + response.statusText)
                 setIsSubmit(false)
@@ -108,7 +106,7 @@ export default function SignupForm({
                                     required />
                                 {
                                     !pending.isNameValid && username.length > 0 && (
-                                        <p className="text-red-600 text-sm">Name can’t be blank.</p>
+                                        <span className="text-red-600 text-sm">Name can’t be blank.</span>
                                     )}
                             </p>
                             <p className="grid gap-3">

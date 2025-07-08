@@ -6,9 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from "react-router"
 import { useState } from "react"
 import Config from "@/config/config"
-import useAuth from "@/hooks/useAuth"
 import { Loader2 } from "lucide-react"
-import useDebounce from "@/hooks/useDebounce"
 import useStorage from "@/hooks/useStorage"
 
 export function LoginForm({
@@ -19,9 +17,6 @@ export function LoginForm({
     const [password, setPassword] = useState("")
     const [pending, setPending] = useState(false)
     const [isSubmit, setIsSubmit] = useState(false)
-    const debounceEmail = useDebounce(email)
-    const debouncePassword = useDebounce(password)
-    const { setIsAuthenticated } = useAuth()
     const { saveToken } = useStorage()
     const navigate = useNavigate()
 
@@ -37,21 +32,19 @@ export function LoginForm({
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, email: string, password: string, url: string): Promise<void> => {
         e.preventDefault()
 
-        const data = {
-            email: email,
-            password: password
-        }
+        const request = new Request(
+            url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email: email, password: password })
+        });
         if (pending) {
             setIsSubmit(true)
         }
         try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            })
+            const response = await fetch(request)
             if (!response.ok) {
                 setIsSubmit(false)
                 throw new Error("Failed to send login details " + response.status + " " + response.statusText)
@@ -61,7 +54,6 @@ export function LoginForm({
             const { token } = await response.json()
             if (status === 200) {
                 saveToken(token)
-                setIsAuthenticated(true)
                 navigate("/")
             }
 
@@ -69,14 +61,13 @@ export function LoginForm({
         } catch (error) {
             console.error(`${error instanceof Error ? error.message : error}`);
             setIsSubmit(false)
-            setIsAuthenticated(false)
 
         }
     }
 
     return (
         <form
-            onSubmit={(e) => handleSubmit(e, debounceEmail, debouncePassword, Config.loginUrl)}
+            onSubmit={(e) => handleSubmit(e, email, password, Config.loginUrl)}
             className={cn("flex flex-col gap-6", className)}
             {...props}
         >
