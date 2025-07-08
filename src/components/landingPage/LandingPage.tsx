@@ -12,14 +12,11 @@ import useUserDetails from "@/hooks/useUserDetails"
 
 export default function LandingPage() {
     const [showTryModal, setShowTryModal] = useState(false)
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated, setIsAuthenticated } = useAuth()
     const { features, benefits } = useFeatures()
     const { token } = useStorage()
-    const { userDetails } = useUserDetails(token, isAuthenticated);
-    const username: string =
-        userDetails && userDetails.length > 0
-            ? userDetails[0].username
-            : "";
+    const { userDetails } = useUserDetails(token, setIsAuthenticated)
+    const username: string | undefined = userDetails?.username
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -47,7 +44,7 @@ export default function LandingPage() {
                         {token ? (
                             <div className="flex items-center space-x-3">
                                 <span className="text-sm text-gray-600">Welcome, {username}</span>
-                                <Button variant="outline" >
+                                <Button variant="outline" className="cursor-pointer">
                                     Logout
                                 </Button>
                             </div>

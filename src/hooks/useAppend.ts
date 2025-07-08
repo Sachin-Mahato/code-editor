@@ -31,22 +31,3 @@ export default function useAppend(
         };
     }, [htmlValue, cssFiles, prevRef]);
 }
-
-// useEffect(() => {
-//     const isActive = cssFiles.some((f) => f.isOpen);
-//     if (!isActive) {
-//         return;
-//     }
-//     // const container = document.body.querySelector('[role="preview"]');
-//     const container = prevRef.current;
-//     if (!container) return;
-
-//     const style = document.createElement("style");
-//     style.textContent = cssFiles.map((ele) => ele.content).join("");
-//     container.prepend(style);
-
-//     // Remove only the style element on cleanup
-//     return () => {
-//         container.removeChild(style);
-//     };
-// }, [cssFiles,prevRef]);
