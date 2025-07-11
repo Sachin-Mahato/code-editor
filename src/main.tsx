@@ -1,24 +1,34 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense, lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from "@/App";
-
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import HomePage from "@/components/landingPage/LandingPage.tsx"
 import NotFoundPage from "@/components/landingPage/NotFoundPage.tsx"
 import SignupPage from "@/components/auth/SignupPage.tsx"
 import LoginPage from "@/components/auth/LoginPage.tsx"
 import AuthProvider from './context/authContextProvider';
+import { Loader2 } from 'lucide-react'
+
+const Code = lazy(() => import("./App"));
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <HomePage />,
-        errorElement: <NotFoundPage />
+        errorElement: <NotFoundPage />,
     },
     {
         path: "/code",
-        element: <App />,
+        element: (
+            <Suspense fallback={
+                <div className="flex items-center justify-center h-screen">
+                    <Loader2 className="h-12 w-12 animate-spin text-gray-500" />
+                </div>
+            }
+            >
+                <Code />
+            </Suspense >
+        ),
 
         errorElement: <NotFoundPage />
     },
@@ -26,10 +36,12 @@ const router = createBrowserRouter([
         path: "/signup",
         element: <SignupPage />,
 
+        errorElement: <NotFoundPage />
     },
     {
         path: "/login",
-        element: <LoginPage />
+        element: <LoginPage />,
+        errorElement: <NotFoundPage />
     },
 
 ]);

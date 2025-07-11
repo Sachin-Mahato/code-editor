@@ -1,6 +1,6 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import type { FileTab } from "../../hooks/useFileContext"
 import TabItem from "@/components/workspace/TabItems"
+import { FileTab } from "@/types/types"
 
 interface TabsContainerProps {
     tabs: FileTab[]

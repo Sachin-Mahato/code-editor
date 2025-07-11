@@ -28,3 +28,11 @@ export interface FileItem {
     language?: string;
     children?: FileItem[];
 }
+
+export interface FileTab {
+    fileId: string;
+    fileName: string;
+    language: string;
+    isModified: boolean;
+    isActive: boolean;
+}

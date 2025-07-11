@@ -3,11 +3,10 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 import { useState } from "react"
-import Config from "@/config/config"
 import { Loader2 } from "lucide-react"
-import useStorage from "@/hooks/useStorage"
+import useLogin from "@/hooks/useLogin"
 
 export function LoginForm({
     className,
@@ -15,59 +14,17 @@ export function LoginForm({
 }: React.ComponentProps<"form">) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [pending, setPending] = useState(false)
-    const [isSubmit, setIsSubmit] = useState(false)
-    const { saveToken } = useStorage()
-    const navigate = useNavigate()
+    const { handleSubmit, setPending, validateEmail, isSubmit, pending } = useLogin();
 
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        setEmail(e.target.value)
         const value = e.target.value;
-
-        if (emailReg.test(value)) {
-            setPending(true)
-        }
-    }
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, email: string, password: string, url: string): Promise<void> => {
-        e.preventDefault()
-
-        const request = new Request(
-            url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email: email, password: password })
-        });
-        if (pending) {
-            setIsSubmit(true)
-        }
-        try {
-            const response = await fetch(request)
-            if (!response.ok) {
-                setIsSubmit(false)
-                throw new Error("Failed to send login details " + response.status + " " + response.statusText)
-            }
-
-            const { status } = response
-            const { token } = await response.json()
-            if (status === 200) {
-                saveToken(token)
-                navigate("/")
-            }
-
-
-        } catch (error) {
-            console.error(`${error instanceof Error ? error.message : error}`);
-            setIsSubmit(false)
-
-        }
-    }
+        setEmail(value);
+        setPending(validateEmail(value));
+    };
 
     return (
         <form
-            onSubmit={(e) => handleSubmit(e, email, password, Config.loginUrl)}
+            onSubmit={(e) => handleSubmit(e, email, password)}
             className={cn("flex flex-col gap-6", className)}
             {...props}
         >

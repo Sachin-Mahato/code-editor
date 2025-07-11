@@ -35,7 +35,7 @@
 
 
 import useFileContext from "@/hooks/useFileContext";
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 
 interface LivePreviewProps {
     htmlValue: string

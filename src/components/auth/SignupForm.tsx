@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 import React, { useState } from "react"
 import { Loader2 } from "lucide-react"
-import Config from "@/config/config"
+import useSignup from "@/hooks/useSignup"
 
 export default function SignupForm({
     className,
@@ -21,69 +21,28 @@ export default function SignupForm({
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [pending, setPending] = useState({
-        isNameValid: false,
-        isEmailValid: false,
-    });
-    const [isSubmit, setIsSubmit] = useState(false);
-    const navigation = useNavigate()
+    const { handleSubmit, pending, isSubmit, validateEmail, validateName, setPending } = useSignup()
 
     const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value;
-        const nameReg = /^[A-Za-z][A-Za-z\s]*$/;
-        setUsername(e.target.value)
-        if (nameReg.test(val)) {
-            setPending(prev => ({ ...prev, isNameValid: nameReg.test(val) }))
-        }
-    }
-    const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value
-        const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        setEmail(e.target.value)
+        const value = e.target.value;
+        setUsername(value);
+        setPending((prev) => ({ ...prev, isNameValid: validateName(value) }));
+    };
 
-        if (emailReg.test(value)) {
-            setPending(prev => ({ ...prev, isEmailValid: emailReg.test(value) }))
-        }
-    }
+    const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setEmail(value);
+        setPending((prev) => ({ ...prev, isEmailValid: validateEmail(value) }));
+    };
 
     const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value)
+        const value = e.target.value
+        setPassword(value);
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, username: string, email: string, password: string, url: string): Promise<void> => {
-        e.preventDefault()
-        const { isNameValid, isEmailValid } = pending;
-
-        if (isEmailValid && isNameValid) {
-            setIsSubmit(true)
-        }
-        const request = new Request(
-            url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username: username, email: email, password: password })
-        }
-        );
-
-        try {
-            const response = await fetch(request)
-            if (!response.ok) {
-                console.log("Failed to send user sign up details " + response.status + response.statusText)
-                setIsSubmit(false)
-                return;
-            }
-            navigation("/login")
-        } catch (error) {
-            setIsSubmit(false)
-            console.error("Failed to sign up " + error);
-
-        }
-    }
     return (
         <form
-            onSubmit={(e) => handleSubmit(e, username, email, password, Config.registerUrl)}
+            onSubmit={(e) => handleSubmit(e, username, email, password)}
             className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader>
@@ -106,7 +65,7 @@ export default function SignupForm({
                                     required />
                                 {
                                     !pending.isNameValid && username.length > 0 && (
-                                        <span className="text-red-600 text-sm">Name can’t be blank.</span>
+                                        <span className="text-red-600 text-sm"> Name can’t be blank or contain numbers or special characters.</span>
                                     )}
                             </p>
                             <p className="grid gap-3">
