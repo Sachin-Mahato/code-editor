@@ -93,7 +93,7 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
         setFileList(prev => makeActiveByName(prev, tabText));
         setEditorVal("");
     }
-    const tabCloseHandler = (name: string) => {
+    const closeTab = (name: string) => {
         setTabs(prev => prev.filter(f => name !== f.fileName));
     }
 
@@ -122,7 +122,7 @@ const FileTreeContextProvider = ({ children }: { children: ReactNode }) => {
                 addFileToList,
                 editorHandleChange,
                 onTabClick,
-                tabCloseHandler,
+                closeTab
             }}
         >
             {children}
