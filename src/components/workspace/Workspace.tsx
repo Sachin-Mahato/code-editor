@@ -63,13 +63,11 @@
 // export default Workspace;
 
 
-"use client"
 
 import { Editor, type OnMount } from "@monaco-editor/react"
 import { useEffect, useRef } from "react"
 import { Separator } from "@/components/ui/separator"
-import useFileContext from "../../hooks/useFileContext"
-import useResize from "../../hooks/useResize"
+import useFileContext from "@/hooks/useFileContext"
 
 interface WorkspaceProps {
     id: string
@@ -80,8 +78,6 @@ interface WorkspaceProps {
 const Workspace = ({ id, lang, val }: WorkspaceProps) => {
     const { editorVal, editorHandleChange } = useFileContext()
     const editorRef = useRef<any>(null)
-    const containerRef = useRef<HTMLDivElement | null>(null)
-    const refRight = useRef<HTMLDivElement | null>(null)
 
     const handleEditorDidMount: OnMount = (editorInstance) => {
         editorRef.current = editorInstance
@@ -92,7 +88,6 @@ const Workspace = ({ id, lang, val }: WorkspaceProps) => {
         editorRef.current?.focus()
     }, [])
 
-    useResize(containerRef, refRight)
 
     return (
         <div className="flex flex-col w-full h-full bg-[#1e1e1e] overflow-hidden">
@@ -109,8 +104,9 @@ const Workspace = ({ id, lang, val }: WorkspaceProps) => {
                     onChange={(value) => editorHandleChange(value, id, lang)}
                     onMount={handleEditorDidMount}
                     options={{
-                        minimap: { enabled: true },
+                        minimap: { enabled: false },
                         fontSize: 14,
+                        fontFamily: "Fira Code, Consolas, Courier New, monospace",
                         lineHeight: 1.5,
                         padding: { top: 8, bottom: 8 },
                         scrollBeyondLastLine: false,
@@ -120,9 +116,17 @@ const Workspace = ({ id, lang, val }: WorkspaceProps) => {
                         bracketPairColorization: { enabled: true },
                         wordWrap: "on",
                         automaticLayout: true,
+                        tabSize: 4,
+                        insertSpaces: true,
+                        useTabStops: true,
+                        detectIndentation: false,
+                        formatOnPaste: true,
+                        formatOnType: true,
+
                     }}
                 />
             </div>
+
 
             {/* Compact status bar */}
             <div className="flex items-center justify-between px-3 py-1 bg-[#007acc] text-white text-xs flex-shrink-0 h-6">
@@ -134,7 +138,7 @@ const Workspace = ({ id, lang, val }: WorkspaceProps) => {
                     <span>{lang}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-white/80">Ready</span>
+                    <span className="text-white/80">Go Live</span>
                 </div>
             </div>
         </div>

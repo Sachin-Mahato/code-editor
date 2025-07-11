@@ -14,7 +14,7 @@ export default function useUserDetails(
     const [userDetails, setUserDetails] = useState<userDetailsType | null>(
         null,
     );
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -27,12 +27,14 @@ export default function useUserDetails(
 
         const controller = new AbortController();
         const signal = controller.signal;
-        const request = new Request(Config.me, {
+        const { me } = Config;
+        const request = new Request(me, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
+            cache: "default",
             signal: signal,
         });
 

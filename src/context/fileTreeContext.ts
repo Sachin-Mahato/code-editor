@@ -14,10 +14,17 @@ interface FileTreeContextType {
     checkIfFileClicked: (name: string) => void;
     toggleFileIconClick: () => void;
     addFileToList: (input: string) => void;
-    toggleFileActiveState: (e:React.MouseEvent<HTMLDivElement>, name: string) => void;
-    editorHandleChange: (val: string | undefined, id: string, lang: string) => void;
-    onTabClick: (e:React.MouseEvent<HTMLParagraphElement>) => void;
-    tabCloseHandler: (name:string) => void
+    toggleFileActiveState: (
+        e: React.MouseEvent<HTMLDivElement>,
+        name: string,
+    ) => void;
+    editorHandleChange: (
+        val: string | undefined,
+        id: string,
+        lang: string,
+    ) => void;
+    onTabClick: (e: React.MouseEvent<HTMLParagraphElement>) => void;
+    closeTab: (name: string) => void;
 }
 
-export const fileTreeContext = createContext<FileTreeContextType | null>(null)
+export const fileTreeContext = createContext<FileTreeContextType | null>(null);

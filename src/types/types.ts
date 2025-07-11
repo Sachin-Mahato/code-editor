@@ -20,3 +20,11 @@ export type cssFileType = {
     content: string;
     isOpen: boolean;
 };
+
+export interface FileItem {
+    id: string;
+    name: string;
+    type: "file" | "folder";
+    language?: string;
+    children?: FileItem[];
+}
