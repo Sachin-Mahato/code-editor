@@ -1,4 +1,4 @@
-import FileTreeContextProvider from "../../context/FileContext"
+import FileTreeContextProvider from "../../context/FileContextProvider"
 import { FileTreeLayout } from "./FileTreeLayout"
 
 const FileTreeContainer = () => {

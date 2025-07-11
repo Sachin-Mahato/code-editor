@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState, useCallback } from "react";
-import { fileTreeContext } from "@/context/fileTreeContext";
+import { fileTreeContext } from "@/context/fileContext";
 import makeActiveByName, { debounce, updater } from "@/utils/utils"
 import { cssFileType, FileType, htmlFileType } from "@/types/types";
 import { generateUniqueId, htmlDefaultValue, fileDefaultValue, cssDefaultValue } from "@/utils/utils";
