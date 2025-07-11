@@ -4,11 +4,11 @@ import Config from "@/config/config";
 import { registerUser } from "@/service/authService";
 
 export default function useSignup() {
-    const [pending, setPending] = useState({
-        isNameValid: false,
-        isEmailValid: false,
+    const [isLoading, setIsLoading] = useState(false);
+    const [validationErrors, setValidationErrors] = useState({
+        name: false,
+        email: false,
     });
-    const [isSubmit, setIsSubmit] = useState(false);
     const navigate = useNavigate();
 
     const validateEmail = (email: string): boolean => {
@@ -31,27 +31,29 @@ export default function useSignup() {
         const isEmailValid = validateEmail(email);
         const isNameValid = validateName(username);
 
-        setPending({ isEmailValid, isNameValid });
+        setValidationErrors({
+            name: !isNameValid,
+            email: !isEmailValid,
+        });
 
         if (!isEmailValid || !isNameValid) return;
 
-        setIsSubmit(true);
+        setIsLoading(true);
         try {
             await registerUser(Config.registerUrl, username, email, password);
             navigate("/login");
         } catch (err) {
-            console.error(err instanceof Error ? err.message : err);
-            setIsSubmit(false);
+            console.error(err instanceof Error ? err.message : String(err));
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return {
-        pending,
-        isSubmit,
-        setPending,
+        isLoading,
+        validationErrors,
         handleSubmit,
         validateEmail,
         validateName,
-        setIsSubmit,
     };
 }

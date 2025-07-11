@@ -5,8 +5,7 @@ import useStorage from "@/hooks/useStorage";
 import Config from "@/config/config";
 
 export default function useLogin() {
-    const [pending, setPending] = useState(false);
-    const [isSubmit, setIsSubmit] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const { saveToken } = useStorage();
     const navigate = useNavigate();
 
@@ -22,25 +21,23 @@ export default function useLogin() {
     ) => {
         e.preventDefault();
 
-        if (!pending) return;
+        if (isLoading) return;
 
-        setIsSubmit(true);
+        setIsLoading(true);
         try {
             const token = await loginUser(Config.loginUrl, email, password);
             saveToken(token);
             navigate("/");
         } catch (err) {
-            console.error(err instanceof Error ? err.message : err);
-            setIsSubmit(false);
+            console.error(err instanceof Error ? err.message : String(err));
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return {
-        pending,
-        isSubmit,
-        setIsSubmit,
+        isLoading,
         handleSubmit,
         validateEmail,
-        setPending,
     };
 }

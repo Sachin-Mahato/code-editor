@@ -39,7 +39,9 @@ export default function TryWithoutLoginDialog({ open, onOpenChange }: TryWithout
                         }}
                         className="w-full cursor-pointer"
                     >
-                        Continue Without Saving
+                        <Link to={"/code"}>
+                            Continue Without Saving
+                        </Link>
                     </Button>
                 </div>
             </DialogContent>
