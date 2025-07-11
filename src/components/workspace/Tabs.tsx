@@ -1,8 +1,8 @@
 import TabsContainer from "@/components/workspace/TabContainer";
-import useFileContext from "@/hooks/useFileContext";
+import useTab from "@/hooks/useTab";
 
 export default function Tabs() {
-    const { tabs, activeTab, switchTab, closeTab } = useFileContext()
+    const { tabs, activeTab, switchTab, closeTab } = useTab();
     return (
         <TabsContainer
             tabs={tabs}

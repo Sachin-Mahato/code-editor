@@ -4,7 +4,7 @@ import useFileContext from "../../hooks/useFileContext"
 import TopBar from "./TopBar"
 import ExplorerPanel from "./ExplorerPanel"
 import TabsArea from "@/components/fileTree/TabArea"
-import ContentArea from "./ContentArea"
+import ContentArea from "./CodeArea"
 
 export const FileTreeLayout = () => {
     const { tabs, htmlFiles } = useFileContext()

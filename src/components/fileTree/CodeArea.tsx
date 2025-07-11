@@ -14,15 +14,17 @@ interface ContentAreaProps {
     htmlFiles: Array<{ fileId: string; content: string }>
 }
 
-const ContentArea: React.FC<ContentAreaProps> = ({
-    containerRef,
-    previewMode,
-    splitRatio,
-    onMouseDownDivider,
-    onDividerDoubleClick,
-    tabs,
-    htmlFiles,
-}) => {
+const ContentArea: React.FC<ContentAreaProps> = (
+    {
+        containerRef,
+        previewMode,
+        splitRatio,
+        onMouseDownDivider,
+        onDividerDoubleClick,
+        tabs,
+        htmlFiles,
+    }
+) => {
     const showCode = previewMode === "code" || previewMode === "split"
     const showPreview = previewMode === "preview" || previewMode === "split"
 
