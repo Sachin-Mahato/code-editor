@@ -3,7 +3,9 @@ import { Link } from "react-router"
 
 export default function Footer() {
     return (
-        <footer className="bg-gray-900 text-white py-12 px-4">
+        <footer
+            aria-label="footer"
+            className="bg-gray-900 text-white py-12 px-4">
             <div className="container mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="flex items-center space-x-2 mb-4 md:mb-0">

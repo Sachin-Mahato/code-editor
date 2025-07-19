@@ -15,7 +15,9 @@ interface AuthCTASectionProps {
 
 export default function AuthCTASection({ isAuthenticated, benefits }: AuthCTASectionProps) {
     return (
-        <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <section
+            data-testid="authCTASection"
+            className="py-20 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
             <div className="container mx-auto text-center">
                 <Lock className="h-16 w-16 mx-auto mb-6 opacity-90" />
                 <h2 className="text-4xl font-bold mb-4">Save Your Work, Keep Your Progress</h2>

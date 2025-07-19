@@ -8,7 +8,10 @@ interface Feature {
 
 export default function FeaturesSection({ features }: { features: Feature[] }) {
     return (
-        <section id="features" className="py-20 px-4 bg-white">
+        <section
+            data-testid="featuresSection"
+            aria-label="featuresSection"
+            id="features" className="py-20 px-4 bg-white">
             <div className="container mx-auto">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl font-bold text-gray-900 mb-4">Everything You Need to Code</h2>
@@ -18,7 +21,11 @@ export default function FeaturesSection({ features }: { features: Feature[] }) {
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {features.map((feature, index) => (
-                        <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                        <Card
+                            key={index}
+                            className="text-center hover:shadow-lg transition-shadow"
+                            data-testid={`feature-${index}`}
+                        >
                             <CardHeader>
                                 <div className="mx-auto w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
                                     {feature.icon}
