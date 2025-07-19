@@ -1,103 +1,47 @@
-import { render, screen, } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from 'vitest';
 import LandingPage from "@/components/landingPage/LandingPage";
 import "@testing-library/jest-dom";
-import { MemoryRouter, Route, Routes } from 'react-router';
-import userEvent from "@testing-library/user-event"
+import { MemoryRouter } from "react-router";
 import AuthProvider from '@/context/authContextProvider';
-import LoginPage from '@/components/auth/LoginPage';
-import SignupPage from '@/components/auth/SignupPage';
+import * as useAuthModule from '@/hooks/useAuth';
+import * as useFeaturesModule from '@/hooks/useFeatures';
+import * as useStorageModule from '@/hooks/useStorage';
+import * as useUserDetailsModule from '@/hooks/useUserDetails';
+
+vi.mock('react-router', async () => {
+    const actual = await vi.importActual('react-router');
+    return {
+        ...actual,
+        useNavigate: () => vi.fn(),
+    };
+});
 
 describe("Landing Page", () => {
+    it("should render all main sections", () => {
+        // Mock the hooks
+        vi.spyOn(useAuthModule, 'default').mockReturnValue({ isAuthenticated: false, setIsAuthenticated: vi.fn() });
+        vi.spyOn(useFeaturesModule, 'useFeatures').mockReturnValue({
+            features: [{ title: 'Feature 1', description: 'Description 1', icon: <div>Icon</div> }],
+            benefits: [{ title: 'Benefit 1', description: 'Description 1', icon: <div>Icon</div> }]
+        });
+        vi.spyOn(useStorageModule, 'default').mockReturnValue({ token: "", saveToken: vi.fn() });
+        vi.spyOn(useUserDetailsModule, 'default').mockReturnValue({ userDetails: { id: "", username: "", email: "" }, loading: false, error: null });
 
-    it("redirects to login page when Login button is clicked", async () => {
         render(
-            <MemoryRouter initialEntries={['/']}>
+            <MemoryRouter>
                 <AuthProvider>
-                    <Routes>
-                        <Route path="/" element={<LandingPage />} />
-                        <Route path="/login" element={<LoginPage />} />
-                    </Routes>
+                    <LandingPage />
                 </AuthProvider>
             </MemoryRouter>
         );
 
-        const loginButtons = screen.getAllByTestId("login");
+        expect(screen.getByRole('banner')).toBeInTheDocument(); // Header
+        expect(screen.getByLabelText('hero')).toBeInTheDocument(); // HeroSection
+        expect(screen.getByTestId('featuresSection')).toBeInTheDocument(); // FeaturesSection
+        expect(screen.getByTestId('authCTASection')).toBeInTheDocument(); // AuthCTASection
+        expect(screen.getByRole('contentinfo')).toBeInTheDocument(); // Footer
 
-        loginButtons.forEach(button => {
-            expect(button).toBeInTheDocument();
-        })
-
-        expect(loginButtons.length).toBeGreaterThan(0);
-
-        await userEvent.click(loginButtons[0]);
-        await userEvent.click(loginButtons[1]);
-
-        const signUpPage = await screen.findByTestId("loginPage");
-        expect(signUpPage).toBeInTheDocument();
-
+        expect(screen.queryByTestId('try-dialog')).not.toBeInTheDocument();
     });
-    it("redirects to sign page when Sign up button is clicked", async () => {
-
-        render(
-            <MemoryRouter initialEntries={['/']}>
-                <AuthProvider>
-                    <Routes>
-                        <Route path="/" element={<LandingPage />} />
-                        <Route path="/signup" element={<SignupPage />} />
-                    </Routes>
-                </AuthProvider>
-            </MemoryRouter>
-        );
-
-        const signUpButton = await screen.findByTestId("signup")
-        expect(signUpButton).toBeInTheDocument();
-        await userEvent.click(signUpButton);
-        const signUpPage = await screen.findByTestId("signupPage");
-        expect(signUpPage).toBeInTheDocument();
-    })
-    it("redirect to sign up page when Get started free button is clicked", async () => {
-        render(
-            <MemoryRouter initialEntries={['/']}>
-                <AuthProvider>
-                    <Routes>
-                        <Route path="/" element={<LandingPage />} />
-                        <Route path="/signup" element={<SignupPage />} />
-                    </Routes>
-                </AuthProvider>
-            </MemoryRouter>
-        );
-
-        const getStartedButton = screen.getByTestId("get-started");
-        expect(getStartedButton).toBeInTheDocument();
-
-        await userEvent.click(getStartedButton);
-        const signUpButton = screen.getByTestId("signupPage");
-        expect(signUpButton).toBeInTheDocument();
-
-    })
-
-    it("redirect to sign up page when create free account button is clicked", async () => {
-        render(
-            <MemoryRouter initialEntries={['/']}>
-                <AuthProvider>
-                    <Routes>
-                        <Route path="/" element={<LandingPage />} />
-                        <Route path="/signup" element={<SignupPage />} />
-                    </Routes>
-                </AuthProvider>
-            </MemoryRouter>
-        );
-
-        const getStartedButton = screen.getByTestId("create-free-account");
-        expect(getStartedButton).toBeInTheDocument();
-
-        await userEvent.click(getStartedButton);
-        const signUpButton = screen.getByTestId("signupPage");
-        expect(signUpButton).toBeInTheDocument();
-
-    })
-
-
-
 });

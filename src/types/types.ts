@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 export type FileType = {
     fileId: string;
     fileName: string;
@@ -36,3 +38,9 @@ export interface FileTab {
     isModified: boolean;
     isActive: boolean;
 }
+
+export type Item = {
+    icon: JSX.Element;
+    title: string;
+    description: string;
+};

@@ -29,7 +29,9 @@ const ContentArea: React.FC<ContentAreaProps> = (
     const showPreview = previewMode === "preview" || previewMode === "split"
 
     return (
-        <div className="flex flex-1 min-h-0 overflow-hidden" ref={containerRef}>
+        <div className="flex flex-1 min-h-0 overflow-hidden" ref={containerRef}
+            data-testid="code-area"
+        >
             {showCode && (
                 <div
                     className="min-w-0 overflow-hidden bg-[#1e1e1e] flex flex-col"

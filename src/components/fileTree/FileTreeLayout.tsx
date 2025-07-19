@@ -4,7 +4,7 @@ import useFileContext from "../../hooks/useFileContext"
 import TopBar from "./TopBar"
 import ExplorerPanel from "./ExplorerPanel"
 import TabsArea from "@/components/fileTree/TabArea"
-import ContentArea from "./CodeArea"
+import CodeArea from "./CodeArea"
 
 export const FileTreeLayout = () => {
     const { tabs, htmlFiles } = useFileContext()
@@ -51,7 +51,7 @@ export const FileTreeLayout = () => {
                 <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
                     {tabs.length > 0 && <TabsArea />}
 
-                    <ContentArea
+                    <CodeArea
                         containerRef={containerRef}
                         previewMode={previewMode}
                         splitRatio={splitRatio}
