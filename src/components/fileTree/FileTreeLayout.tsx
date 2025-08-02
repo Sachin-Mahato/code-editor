@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react"
-import useFileContext from "../../hooks/useFileContext"
+import useFileContext from "../../contexts/file/useFileContext"
 
 import TopBar from "./TopBar"
 import ExplorerPanel from "./ExplorerPanel"

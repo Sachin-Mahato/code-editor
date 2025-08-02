@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import AuthContext from "@/context/authContext";
+import AuthContext from "@/contexts/authContext";
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);

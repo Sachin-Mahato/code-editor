@@ -1,4 +1,3 @@
-import FileTreeContextProvider from "../../context/FileContextProvider"
 import { FileTreeLayout } from "./FileTreeLayout"
 
 const FileTreeContainer = () => {
@@ -8,10 +7,8 @@ const FileTreeContainer = () => {
             aria-label="File Tree Container"
             data-testid="file-tree-container">
 
-            <FileTreeContextProvider >
 
-                <FileTreeLayout />
-            </FileTreeContextProvider>
+            <FileTreeLayout />
         </div>
     )
 }

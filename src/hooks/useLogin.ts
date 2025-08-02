@@ -25,8 +25,8 @@ export default function useLogin() {
 
         setIsLoading(true);
         try {
-            const token = await loginUser(Config.loginUrl, email, password);
-            saveToken(token);
+            const tokens = await loginUser(Config.loginUrl, email, password);
+            saveToken(tokens);
             navigate("/");
         } catch (err) {
             console.error(err instanceof Error ? err.message : String(err));

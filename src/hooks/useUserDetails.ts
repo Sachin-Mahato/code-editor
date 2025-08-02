@@ -1,71 +1,25 @@
-import Config from "@/config/config";
-import React, { useEffect, useState } from "react";
-
-type userDetailsType = {
-    id: string;
-    username: string;
-    email: string;
-};
+import getUserDetails from "@/service/getUserDetailsService";
+import { ApiUserDetails } from "@/types/types";
+import { useQuery } from "@tanstack/react-query";
+import React, { useEffect } from "react";
 
 export default function useUserDetails(
     token: string | null,
     setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
-    const [userDetails, setUserDetails] = useState<userDetailsType | null>(
-        null,
-    );
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const { data, error, isLoading } = useQuery<ApiUserDetails, Error>({
+        queryKey: ["userDetails", token],
+        queryFn: () => getUserDetails(token),
+        enabled: !!token,
+        gcTime: 1000 * 60 * 5,
+    });
 
     useEffect(() => {
-        if (!token) {
-            setUserDetails(null);
-            setError(null);
-            setLoading(false);
-            return;
+        if (token?.length) {
+            setIsAuthenticated(true);
+        } else {
+            setIsAuthenticated(false);
         }
-
-        const controller = new AbortController();
-        const signal = controller.signal;
-        const { me } = Config;
-        const request = new Request(me, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            cache: "default",
-            signal: signal,
-        });
-
-        const getUserDetails = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const response = await fetch(request);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch user details");
-                }
-                const data = await response.json();
-                setUserDetails(data);
-                setIsAuthenticated(true);
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                    setIsAuthenticated(false);
-                    console.error(
-                        "Error fetching user details:",
-                        error.message,
-                    );
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-        getUserDetails();
-
-        return () => controller.abort();
     }, [token, setIsAuthenticated]);
-
-    return { userDetails, loading, error };
+    return { data, error, isLoading };
 }

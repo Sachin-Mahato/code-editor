@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from 'vitest';
 import LandingPage from "@/components/landingPage/LandingPage";
 import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router";
-import AuthProvider from '@/context/authContextProvider';
+import AuthProvider from '@/contexts/authContextProvider';
 import * as useAuthModule from '@/hooks/useAuth';
 import * as useFeaturesModule from '@/hooks/useFeatures';
 import * as useStorageModule from '@/hooks/useStorage';

@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { fileTreeContext } from "../context/fileContext";
+import { FileContext } from "./fileContext";
 
 const useFileContext = () => {
-    const context = useContext(fileTreeContext);
+    const context = useContext(FileContext);
 
     if (!context)
         throw new Error("File tree context must be within a provider");

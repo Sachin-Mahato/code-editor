@@ -20,13 +20,13 @@ export const loginUser = async (
     }
 
     const { status } = response;
-    const { token } = await response.json();
+    const { accessToken, refreshToken } = await response.json();
 
-    if (status !== 200 || !token) {
+    if (status !== 200 || !refreshToken || !accessToken) {
         throw new Error("Unexpected response or missing token");
     }
 
-    return token;
+    return refreshToken;
 };
 
 export const registerUser = async (

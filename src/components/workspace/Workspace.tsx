@@ -1,7 +1,7 @@
 import { Editor, type OnMount } from "@monaco-editor/react"
 import { useEffect, useRef } from "react"
 import { Separator } from "@/components/ui/separator"
-import useFileContext from "@/hooks/useFileContext"
+import useFileContext from "@/contexts/file/useFileContext"
 
 interface WorkspaceProps {
     id: string

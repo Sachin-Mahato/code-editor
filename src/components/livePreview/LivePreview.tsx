@@ -34,7 +34,7 @@
 
 
 
-import useFileContext from "@/hooks/useFileContext";
+import useFileContext from "@/contexts/file/useFileContext";
 import { useRef } from "react"
 
 interface LivePreviewProps {

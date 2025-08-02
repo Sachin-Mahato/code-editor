@@ -16,8 +16,8 @@ export default function LandingPage() {
     const { isAuthenticated, setIsAuthenticated } = useAuth()
     const { features, benefits } = useFeatures()
     const { token } = useStorage()
-    const { userDetails } = useUserDetails(token, setIsAuthenticated)
-    const username: string | undefined = userDetails?.username
+    const { data } = useUserDetails(token, setIsAuthenticated)
+    const username: string | undefined = data?.username
     const navigate = useNavigate();
 
     function logout() {
