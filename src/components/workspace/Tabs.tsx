@@ -3,7 +3,16 @@ import useTab from "@/hooks/tabs/useTab";
 
 export default function Tabs() {
     const { tabs, activeTab, switchTab, closeTab } = useTab();
-    return (
+    export default function Tabs() {
+        const { tabs, activeTab, switchTab, closeTab } = useTab();
+        return (
+            <TabsContainer
+                tabs={tabs}
+                activeTabId={activeTab}
+                onSwitch={switchTab}
+                onClose={closeTab}
+            />
+        );
         <TabsContainer
             tabs={tabs}
             activeTabId={activeTab}
@@ -11,4 +20,4 @@ export default function Tabs() {
             onClose={closeTab}
         />
     );
-}
+    }

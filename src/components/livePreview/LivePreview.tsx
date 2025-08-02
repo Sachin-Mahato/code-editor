@@ -39,15 +39,20 @@ import { useRef } from "react"
 
 interface LivePreviewProps {
     htmlValue: string
+interface LivePreviewProps {
+    htmlValue: string
 }
 
 const LivePreview = ({ htmlValue }: LivePreviewProps) => {
     const iframeRef = useRef<HTMLIFrameElement>(null)
 
-    const { cssFiles } = useFileContext();
-    const css = cssFiles.map((f) => f.content).join("\n");
+    const LivePreview = ({ htmlValue }: LivePreviewProps) => {
+        const iframeRef = useRef<HTMLIFrameElement>(null)
 
-    const srcDoc = `
+        const { cssFiles } = useFileContext();
+        const css = cssFiles.map((f) => f.content).join("\n");
+
+        const srcDoc = `
         <html>
             <head>
                 <style>${css}</style>
@@ -59,16 +64,42 @@ const LivePreview = ({ htmlValue }: LivePreviewProps) => {
     `;
 
 
-    return (
-        <iframe
-            ref={iframeRef}
-            className="w-full h-full border-0 bg-white"
-            title="Live Preview"
-            sandbox="allow-scripts allow-same-origin"
-            style={{ minHeight: "100%" }}
-            srcDoc={srcDoc}
-        />
+        const css = cssFiles.map((f) => f.content).join("\n");
+
+        const srcDoc = `
+        <html>
+            <head>
+                <style>${css}</style>
+            </head>
+            <body>
+                ${htmlValue}
+            </body>
+        </html>
+    `;
+
+
+        return (
+            <iframe
+                ref={iframeRef}
+                className="w-full h-full border-0 bg-white"
+                title="Live Preview"
+                sandbox="allow-scripts allow-same-origin"
+                style={{ minHeight: "100%" }}
+                srcDoc={srcDoc}
+            />
+        )
+    }
+    <iframe
+        ref={iframeRef}
+        className="w-full h-full border-0 bg-white"
+        title="Live Preview"
+        sandbox="allow-scripts allow-same-origin"
+        style={{ minHeight: "100%" }}
+        srcDoc={srcDoc}
+    />
     )
 }
+
+export default LivePreview
 
 export default LivePreview
