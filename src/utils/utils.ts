@@ -1,4 +1,4 @@
-import { ApiFileResponse, FileType } from "../types/types";
+import { ApiFileResponse, FileType, FileTypeEnum } from "../types/types";
 
 export default function makeActiveByName<T extends { fileName: string }>(
     files: T[],
@@ -49,7 +49,6 @@ export function isValidString(str: string): boolean {
     return true;
 }
 
-// 1) Define the raw API shape
 interface ApiFile {
     id: string;
     fileName: string;
@@ -57,8 +56,7 @@ interface ApiFile {
     sourceCode: string;
 }
 
-// 2) Rename your function and its parameter to something that won’t collide:
-export  function mapApiFilesResponse(
+export function mapApiFilesResponse(
     rawFilesById: Record<string, ApiFile> | null | undefined,
 ): FileType[] {
     if (!rawFilesById) {
@@ -66,16 +64,52 @@ export  function mapApiFilesResponse(
         return [];
     }
 
-    console.log("raw API files:", rawFilesById);
-
     const files: FileType[] = Object.values(rawFilesById).map((apiFile) => ({
         id: apiFile.id,
         fileName: apiFile.fileName,
         language: apiFile.language,
         sourceCode: apiFile.sourceCode,
+
+        // UI
+        type: FileTypeEnum.File,
         isOpen: false,
     }));
 
-    console.log("mapped FileType[]:", files);
     return files;
+}
+
+/** simplified DTO for a single folder */
+export interface SingleFolderDto {
+    id: string;
+    name: string;
+    type: FileTypeEnum.Folder;
+    isOpen: boolean;
+    children: {
+        id: string;
+        name: string;
+        type: FileTypeEnum.File;
+        isOpen: boolean;
+    }[];
+}
+
+/**
+ * map one API response array into a single folder DTO
+ */
+export function mapToSingleFolderDto(
+    apiFiles: ApiFileResponse[],
+    folderId: string,
+    folderName: string,
+): SingleFolderDto {
+    return {
+        id: folderId,
+        name: folderName,
+        type: FileTypeEnum.Folder,
+        isOpen: true, // you can default it open
+        children: apiFiles.map((f) => ({
+            id: f.id!, // hopefully your API always sends IDs here
+            name: f.fileName || "", // default to empty string if missing
+            type: FileTypeEnum.File, // everything in this array is a file
+            isOpen: false, // files aren’t “openable”
+        })),
+    };
 }

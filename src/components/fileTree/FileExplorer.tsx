@@ -1,116 +1,40 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu"
-import { Folder, FolderOpen, Plus, Search, MoreHorizontal, Trash2, Edit, Copy, Download } from "lucide-react"
-import { getLanguageIcon, getLanguageColor } from "../workspace/languageUtil"
-
-interface FileItem {
-    id: string
-    name: string
-    type: "file" | "folder"
-    language?: string
-    children?: FileItem[]
-    isOpen?: boolean
-    sourceCode?: string
-}
+import renderFileTree from "./RenderFileTree"
+import { Search, Plus, MoreHorizontal } from "lucide-react"
+import { FileItem, FileTypeEnum } from "@/types/types"
+import useFileContext from "@/contexts/file/useFileContext"
 
 const FileExplorer = () => {
+    const { fileList } = useFileContext()
     const [searchTerm, setSearchTerm] = useState("")
     const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set(["root"]))
-    // const {} = useFileContext(); 
 
-    const [files] = useState<FileItem[]>([
-        {
-            id: "src",
-            name: "src",
-            type: "folder",
-            children: [
-                { id: "index.html", name: "index.html", type: "file", language: "html", sourceCode: "" },
-                { id: "style.css", name: "style.css", type: "file", language: "css", sourceCode: "" },
-                { id: "script.js", name: "script.js", type: "file", language: "javascript", sourceCode: "" },
-            ],
-        },
-        {
-            id: "test",
-            name: "test",
-            type: "folder",
-            children: [
-                { id: "index.html", name: "index.html", type: "file", language: "html", sourceCode: "" },
-                { id: "style.css", name: "style.css", type: "file", language: "css", sourceCode: "" },
-                { id: "script.js", name: "script.js", type: "file", language: "javascript", sourceCode: "" },
-            ],
-        }
-    ])
+    const [files, setFiles] = useState<FileItem[]>([])
 
+    useEffect(() => {
+        if (!fileList?.length) return
 
+        const mapped: FileItem[] = fileList.map(f => {
+            const incomingName = (f as any).name    // if your context really gives you FileItem[]
+                ?? (f as any).fileName               // or ApiFileResponse.fileName
+                ?? ""
 
+            return {
+                id: f.id ?? "",               // default to "" or throw if missing
+                name: String(incomingName),     // force it to a string
+                type: FileTypeEnum.File,
+                isOpen: false,
+                children: [],                        // leaf
+                language: f.language,
+                sourceCode: f.sourceCode,
+            }
+        })
 
-    const toggleFolder = (folderId: string) => {
-        const newExpanded = new Set(expandedFolders)
-        if (newExpanded.has(folderId)) {
-            newExpanded.delete(folderId)
-        } else {
-            newExpanded.add(folderId)
-        }
-        setExpandedFolders(newExpanded)
-    }
-
-    const renderFileTree = (items: FileItem[], depth = 0) => {
-        return items.map((item) => (
-            <div key={item.id}>
-                <ContextMenu>
-                    <ContextMenuTrigger>
-                        <div
-                            className={`
-                flex items-center gap-2 px-2 py-1 hover:bg-[#2a2d2e] cursor-pointer
-                text-gray-300 hover:text-white transition-colors
-              `}
-                            style={{ paddingLeft: `${depth * 16 + 8}px` }}
-                            onClick={() => (item.type === "folder" ? toggleFolder(item.id) : null)}
-                        >
-                            {item.type === "folder" ? (
-                                expandedFolders.has(item.id) ? (
-                                    <FolderOpen className="h-4 w-4 text-blue-400" />
-                                ) : (
-                                    <Folder className="h-4 w-4 text-blue-400" />
-                                )
-                            ) : (
-                                <span className={`text-sm ${getLanguageColor(item.language!?.toLowerCase())}`}>{getLanguageIcon(item.language!)}</span>
-                            )}
-
-                            <span className="text-sm flex-1 truncate">{item.name}</span>
-
-                        </div>
-                    </ContextMenuTrigger>
-
-                    <ContextMenuContent className="bg-[#2d2d30] border-gray-700">
-                        <ContextMenuItem className="text-gray-300 hover:bg-gray-700 hover:text-white">
-                            <Edit className="h-4 w-4 mr-2" />
-                            Rename
-                        </ContextMenuItem>
-                        <ContextMenuItem className="text-gray-300 hover:bg-gray-700 hover:text-white">
-                            <Copy className="h-4 w-4 mr-2" />
-                            Copy
-                        </ContextMenuItem>
-                        <ContextMenuItem className="text-gray-300 hover:bg-gray-700 hover:text-white">
-                            <Download className="h-4 w-4 mr-2" />
-                            Download
-                        </ContextMenuItem>
-                        <ContextMenuItem className="text-red-400 hover:bg-red-600 hover:text-white">
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Delete
-                        </ContextMenuItem>
-                    </ContextMenuContent>
-                </ContextMenu>
-
-                {item.type === "folder" && item.children && expandedFolders.has(item.id) && (
-                    <div>{renderFileTree(item.children, depth + 1)}</div>
-                )}
-            </div>
-        ))
-    }
+        setFiles(mapped)
+    }, [fileList])
 
     return (
         <div className="flex flex-col h-full">
@@ -142,7 +66,9 @@ const FileExplorer = () => {
 
             {/* File Tree */}
             <ScrollArea className="flex-1">
-                <div className="py-1">{renderFileTree(files)}</div>
+                <div className="py-1">
+                    {renderFileTree(files, 0, expandedFolders, setExpandedFolders)}
+                </div>
             </ScrollArea>
         </div>
     )

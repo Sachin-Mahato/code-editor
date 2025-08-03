@@ -5,6 +5,8 @@ export type ApiFileResponse = {
     fileName?: string;
     language?: string;
     sourceCode?: string;
+
+    children?: ApiFileResponse;
 };
 
 export type ApiUserDetails = {
@@ -13,16 +15,29 @@ export type ApiUserDetails = {
     email?: string;
 };
 
+export enum FileTypeEnum {
+    File = "file",
+    Folder = "folder",
+}
+
+export interface FileItem {
+    id: string;
+    name: string;
+    type: FileTypeEnum;
+    language?: string;
+    children?: FileItem[];
+    isOpen?: boolean;
+    sourceCode?: string;
+}
+
 export interface FileBase extends ApiFileResponse {
     isOpen?: boolean;
+
+    children?: FileBase;
 }
 
 export interface FileType extends FileBase {}
 
-enum FileTypeEnum {
-    file,
-    folder,
-}
 export interface FileItem {
     id: string;
     name: string;
