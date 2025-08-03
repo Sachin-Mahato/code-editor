@@ -1,5 +1,4 @@
 import { StrictMode, Suspense, lazy } from 'react'
-import { StrictMode, Suspense, lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
@@ -7,7 +6,7 @@ import HomePage from "@/components/landingPage/LandingPage.tsx"
 import NotFoundPage from "@/components/landingPage/NotFoundPage.tsx"
 import SignupPage from "@/components/auth/SignupPage.tsx"
 import LoginPage from "@/components/auth/LoginPage.tsx"
-import AuthProvider from './contexts/authContextProvider';
+import AuthProvider from './contexts/auth/authContextProvider';
 import { Loader2 } from 'lucide-react'
 
 

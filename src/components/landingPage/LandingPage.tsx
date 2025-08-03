@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
-import useAuth from "@/hooks/useAuth"
+import useAuth from "@/contexts/auth/useAuth"
 import { useFeatures } from "@/hooks/useFeatures"
 import useStorage from "@/hooks/useStorage"
 import useUserDetails from "@/hooks/useUserDetails"

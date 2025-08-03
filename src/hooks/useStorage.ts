@@ -9,16 +9,16 @@ export default function useStorage() {
     });
 
     useEffect(() => {
-        if(token) {
+        if (token) {
             localStorage.setItem("token", token);
         } else {
             localStorage.removeItem("token");
         }
-    },[token])
+    }, [token]);
 
-    const saveToken = useCallback((newToken: string ) => {
+    const saveToken = useCallback((newToken: string) => {
         setToken(newToken);
-    },[])
+    }, []);
 
-    return {token, saveToken};
+    return { token, saveToken };
 }

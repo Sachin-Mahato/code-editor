@@ -3,8 +3,8 @@ import { describe, it, expect, vi } from 'vitest';
 import LandingPage from "@/components/landingPage/LandingPage";
 import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router";
-import AuthProvider from '@/contexts/authContextProvider';
-import * as useAuthModule from '@/hooks/useAuth';
+import AuthProvider from '@/contexts/auth/authContextProvider';
+import * as useAuthModule from '@/contexts/auth/useAuth';
 import * as useFeaturesModule from '@/hooks/useFeatures';
 import * as useStorageModule from '@/hooks/useStorage';
 import * as useUserDetailsModule from '@/hooks/useUserDetails';
@@ -26,7 +26,7 @@ describe("Landing Page", () => {
             benefits: [{ title: 'Benefit 1', description: 'Description 1', icon: <div>Icon</div> }]
         });
         vi.spyOn(useStorageModule, 'default').mockReturnValue({ token: "", saveToken: vi.fn() });
-        vi.spyOn(useUserDetailsModule, 'default').mockReturnValue({ userDetails: { id: "", username: "", email: "" }, loading: false, error: null });
+        vi.spyOn(useUserDetailsModule, 'default').mockReturnValue({ data: { id: "", username: "", email: "" }, isLoading: false, error: null });
 
         render(
             <MemoryRouter>

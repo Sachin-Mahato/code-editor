@@ -1,4 +1,4 @@
-import { cssFileType, FileType, htmlFileType } from "../types/types";
+import { ApiFileResponse, FileType } from "../types/types";
 
 export default function makeActiveByName<T extends { fileName: string }>(
     files: T[],
@@ -20,9 +20,7 @@ export const updater = (
     id: string,
     val: string,
 ): FileType[] =>
-    files.map((file) =>
-        file.fileId === id ? { ...file, content: val } : file,
-    );
+    files.map((file) => (file.id === id ? { ...file, content: val } : file));
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const debounce = <T extends (...args: any[]) => void>(
@@ -40,156 +38,44 @@ export const debounce = <T extends (...args: any[]) => void>(
     };
 };
 
-export const fileDefaultValue: FileType[] = [
-    {
-        fileId: generateUniqueId(),
-        fileName: "index.html",
-        language: "html",
-        content: `<div class="welcome-message">
-  <h1>Welcome!</h1>
-  <p>
-    We're glad you're here. This project is currently in development, so let us know if you encounter any issues.
-  </p>
-  <div class="contact-us">
-    <p>Contact us:</p>
-    <a href="https://github.com/Sachin-Mahato/code-editor.git" target="_blank">GitHub</a> |
-    <a href="https://x.com/SachinXMahato" target="_blank">X (Twitter)</a> |
-    <a href="https://www.linkedin.com/in/sachinkumarmahato/" target="_blank">LinkedIn</a>
-  </div>
-</div>`,
-        isOpen: true,
-    },
-    {
-        fileId: generateUniqueId(),
-        fileName: "style.css",
-        language: "css",
-        content: `.welcome-message {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 30px;
-  border-radius: 12px;
-  background: #f9f9f9;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  /* stylelint-disable-next-line */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  text-align: center;
-  color: #333;
-}
+export function isValidString(str: string): boolean {
+    const match = /^[A-Za-z][A-Za-z\s]*$/;
 
-.welcome-message h1 {
-  font-size: 2em;
-  color: #2c3e50;
-  margin-bottom: 10px;
-}
+    const value = str.trim();
 
-.welcome-message p {
-  font-size: 1.1em;
-  color: #555;
-}
-
-.contact-us {
-  margin-top: 20px;
-  font-size: 1em;
-  color: #666;
-}
-
-.contact-us a {
-  color: #2c3e50;
-  text-decoration: none;
-  margin: 0 10px;
-  font-weight: 500;
-}
-
-.contact-us a:hover {
-  color: #3498db;
-  text-decoration: underline;
-}
-`,
-        isOpen: false,
-    },
-];
-
-export const htmlDefaultValue: htmlFileType[] = [
-    {
-        fileId: generateUniqueId(),
-        fileName: "index.html",
-        language: "html",
-        content: `<div class="welcome-message">
-  <h1>Welcome!</h1>
-  <p>
-    We're glad you're here. This project is currently in development, so let us know if you encounter any issues.
-  </p>
-  <div class="contact-us">
-    <p>Contact us:</p>
-    <a href="https://github.com/Sachin-Mahato/code-editor.git" target="_blank">GitHub</a> |
-    <a href="https://x.com/SachinXMahato" target="_blank">X (Twitter)</a> |
-    <a href="https://www.linkedin.com/in/sachinkumarmahato/" target="_blank">LinkedIn</a>
-  </div>
-</div>`,
-        isOpen: false,
-    },
-];
-
-export const cssDefaultValue: cssFileType[] = [
-    {
-        fileId: generateUniqueId(),
-        fileName: "style.css",
-        language: "css",
-        content: `.welcome-message {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 30px;
-  border-radius: 12px;
-  background: #f9f9f9;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  text-align: center;
-  color: #333;
-}
-
-.welcome-message h1 {
-  font-size: 2em;
-  color: #2c3e50;
-  margin-bottom: 10px;
-}
-
-.welcome-message p {
-  font-size: 1.1em;
-  color: #555;
-}
-
-.contact-us {
-  margin-top: 20px;
-  font-size: 1em;
-  color: #666;
-}
-
-.contact-us a {
-  color: #2c3e50;
-  text-decoration: none;
-  margin: 0 10px;
-  font-weight: 500;
-}
-
-.contact-us a:hover {
-  color: #3498db;
-  text-decoration: underline;
-}
-`,
-        isOpen: false,
-    },
-];
-
-
-export function isValidString(str: string):boolean {
-  const match = /^[A-Za-z][A-Za-z\s]*$/;
-
-  const value = str.trim();
-   
-    if(!match.test(value)){
-      return false;
+    if (!match.test(value)) {
+        return false;
     }
-  return true;
+    return true;
 }
 
-isValidString("Hello")
+// 1) Define the raw API shape
+interface ApiFile {
+    id: string;
+    fileName: string;
+    language: string;
+    sourceCode: string;
+}
+
+// 2) Rename your function and its parameter to something that won’t collide:
+export  function mapApiFilesResponse(
+    rawFilesById: Record<string, ApiFile> | null | undefined,
+): FileType[] {
+    if (!rawFilesById) {
+        console.warn("mapApiFilesResponse: got empty input");
+        return [];
+    }
+
+    console.log("raw API files:", rawFilesById);
+
+    const files: FileType[] = Object.values(rawFilesById).map((apiFile) => ({
+        id: apiFile.id,
+        fileName: apiFile.fileName,
+        language: apiFile.language,
+        sourceCode: apiFile.sourceCode,
+        isOpen: false,
+    }));
+
+    console.log("mapped FileType[]:", files);
+    return files;
+}

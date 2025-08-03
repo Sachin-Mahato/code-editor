@@ -1,5 +1,5 @@
 import React, { useEffect, type ReactNode } from "react";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "@/contexts/auth/useAuth";
 import { useNavigate } from "react-router";
 
 type ProtectedRouteProps = {

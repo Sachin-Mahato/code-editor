@@ -19,6 +19,7 @@ interface FileItem {
 const FileExplorer = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set(["root"]))
+    // const {} = useFileContext(); 
 
     const [files] = useState<FileItem[]>([
         {

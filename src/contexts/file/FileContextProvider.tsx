@@ -4,19 +4,20 @@ import fileReducer, { initialFileState } from "@/reducers/fileReducer";
 import { FileTreeContextType } from "./fileContext";
 import FileDispatchContext from "./fileDispatcher";
 
-export const FileTreeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const FileContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [state, dispatch] = useReducer(fileReducer, initialFileState);
+    const memoFileState = useMemo<FileTreeContextType>(() => ({
+        fileList: state.fileList,
+        editorVal: state.editorVal,
+    }), [state.fileList, state.editorVal]);
 
-    const contextValue = useMemo<FileTreeContextType>(() => ({
-        fileList: state.fileList
-    }), [state.fileList]);
-
+    const memoDispatch = useMemo(() => dispatch, [])
 
 
     return (
-        <FileDispatchContext.Provider value={dispatch}>
+        <FileDispatchContext.Provider value={memoDispatch}>
 
-            <FileContext.Provider value={contextValue}>
+            <FileContext.Provider value={memoFileState}>
                 {children}
             </FileContext.Provider>
         </FileDispatchContext.Provider>

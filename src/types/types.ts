@@ -32,7 +32,7 @@ export interface FileItem {
 }
 
 export interface FileTab {
-    id: string;
+    fileId: string;
     fileName: string;
     language: string;
     isModified: boolean;
@@ -50,7 +50,8 @@ export type TabsState = FileTab[];
 export type TabsAction =
     | { type: "SET_TABS"; payload: FileTab[] }
     | { type: "ADD_TAB"; payload: FileTab }
-    | { type: "CLOSE_TAB"; payload: string };
+    | { type: "CLOSE_TAB"; payload: string }
+    | { type: "SWITCH_TAB"; payload: string };
 
 export interface FileState {
     fileInputValue: string;
@@ -66,5 +67,5 @@ export type FileAction =
           payload: { value: string; id: string; lang: string };
       }
     | { type: "CHECK_FILE_CLICKED"; payload: string }
-    | { type: "ADD_FILE_FROM_API"; payload: FileType }
+    | { type: "ADD_FILE_FROM_API"; payload: FileType[] }
     | { type: "RESET_EDITOR_VALUE" };
