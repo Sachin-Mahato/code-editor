@@ -31,6 +31,15 @@ export default function fileReducer(
                 fileList: [...state.fileList, ...action.payload],
             };
 
+        case "TOGGLE_FILE_ACTIVE":
+            const toggleFile = state.fileList.filter((f) =>
+                f.id === action.payload ? !f.isOpen : f.isOpen,
+            );
+            return {
+                ...state,
+                fileList: [...toggleFile],
+            };
+
         default: {
             // Exhaustiveness check
             // const _exhaustive: never = action;

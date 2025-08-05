@@ -45,5 +45,7 @@ export function useActionDispatchers() {
         resetEditorValue: (): void => {
             dispatch({ type: "RESET_EDITOR_VALUE" });
         },
+        openFileInWorkspace: (id: string) =>
+            dispatch({ type: "TOGGLE_FILE_ACTIVE", payload: id }),
     };
 }

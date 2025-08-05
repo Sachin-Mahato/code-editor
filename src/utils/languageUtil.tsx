@@ -1,6 +1,13 @@
 import React from "react"
 
+function extractLang(language: string): string {
+  const idx = language.indexOf(".");
+  if (idx === -1) return ""; // No dot found
+  return language.substring(idx + 1);
+}
+
 export function getLanguageIcon(language: string): React.ReactElement {
+  const lang = extractLang(language)
   const iconMap: Record<string, React.ReactElement> = {
     html: (
       <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -30,7 +37,7 @@ export function getLanguageIcon(language: string): React.ReactElement {
   }
 
   return (
-    iconMap[language] ?? (
+    iconMap[lang] ?? (
       <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
         <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
       </svg>
@@ -39,6 +46,7 @@ export function getLanguageIcon(language: string): React.ReactElement {
 }
 
 export function getLanguageColor(language: string): string {
+  const lang = extractLang(language)
   const colors: Record<string, string> = {
     html: "text-orange-500",
     css: "text-blue-500",
@@ -46,5 +54,5 @@ export function getLanguageColor(language: string): string {
     typescript: "text-blue-600",
     json: "text-green-500",
   }
-  return colors[language] ?? "text-gray-400"
+  return colors[lang] ?? "text-gray-400"
 }

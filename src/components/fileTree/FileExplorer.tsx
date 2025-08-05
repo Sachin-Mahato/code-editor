@@ -2,39 +2,34 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import renderFileTree from "./RenderFileTree"
 import { Search, Plus, MoreHorizontal } from "lucide-react"
-import { FileItem, FileTypeEnum } from "@/types/types"
 import useFileContext from "@/contexts/file/useFileContext"
+import FileSystemTree from "./FileSystemTree"
+
+interface Node {
+    name: string
+    nodes?: Node[]
+}
 
 const FileExplorer = () => {
-    const { fileList } = useFileContext()
-    const [searchTerm, setSearchTerm] = useState("")
-    const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set(["root"]))
-
-    const [files, setFiles] = useState<FileItem[]>([])
+    const { fileList } = useFileContext();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [folders, setFolders] = useState<Node[]>([]);
 
     useEffect(() => {
-        if (!fileList?.length) return
+        if (fileList.length > 0) {
+            // Convert each file into a Node
+            const nodes: Node[] = fileList.map((f: any) => ({ name: f.fileName }));
 
-        const mapped: FileItem[] = fileList.map(f => {
-            const incomingName = (f as any).name    // if your context really gives you FileItem[]
-                ?? (f as any).fileName               // or ApiFileResponse.fileName
-                ?? ""
+            const folder: Node = {
+                name: "src",
+                nodes,
+            };
 
-            return {
-                id: f.id ?? "",               // default to "" or throw if missing
-                name: String(incomingName),     // force it to a string
-                type: FileTypeEnum.File,
-                isOpen: false,
-                children: [],                        // leaf
-                language: f.language,
-                sourceCode: f.sourceCode,
-            }
-        })
-
-        setFiles(mapped)
-    }, [fileList])
+            // Add this folder to the folders state
+            setFolders((prev) => [...prev, folder]); // Or use [...prev, folder] if you want to append
+        }
+    }, [fileList]);
 
     return (
         <div className="flex flex-col h-full">
@@ -55,10 +50,18 @@ const FileExplorer = () => {
             <div className="flex items-center justify-between p-2 border-b border-gray-700">
                 <span className="text-xs text-gray-400 uppercase tracking-wide">Files</span>
                 <div className="flex gap-1">
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-gray-400 hover:text-white hover:bg-gray-700">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 text-gray-400 hover:text-white hover:bg-gray-700"
+                    >
                         <Plus className="h-3 w-3" />
                     </Button>
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-gray-400 hover:text-white hover:bg-gray-700">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 text-gray-400 hover:text-white hover:bg-gray-700"
+                    >
                         <MoreHorizontal className="h-3 w-3" />
                     </Button>
                 </div>
@@ -67,7 +70,11 @@ const FileExplorer = () => {
             {/* File Tree */}
             <ScrollArea className="flex-1">
                 <div className="py-1">
-                    {renderFileTree(files, 0, expandedFolders, setExpandedFolders)}
+                    {
+                        folders.map((f) => (
+                            <FileSystemTree key={f.name} node={f} />
+                        ))
+                    }
                 </div>
             </ScrollArea>
         </div>

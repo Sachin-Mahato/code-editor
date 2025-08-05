@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
-import { getLanguageIcon, getLanguageColor } from "@/components/workspace/languageUtil"
+import { getLanguageIcon, getLanguageColor } from "@/utils/languageUtil"
 
 interface TabItemProps {
     fileId: string
