@@ -1,13 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from 'vitest';
-import LandingPage from "@/components/landingPage/LandingPage";
+import LandingPage from "@/pages/landingPage/LandingPage";
 import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router";
-import AuthProvider from '@/contexts/auth/authContextProvider';
-import * as useAuthModule from '@/contexts/auth/useAuth';
-import * as useFeaturesModule from '@/hooks/useFeatures';
-import * as useStorageModule from '@/hooks/useStorage';
-import * as useUserDetailsModule from '@/hooks/useUserDetails';
+import AuthProvider from '@/core/store/auth/authContextProvider';
+import * as useAuthModule from '@/core/store/auth/useAuth';
+import * as useFeaturesModule from '@/core/utils/useFeatures';
+import * as useStorageModule from '@/core/utils/useStorage';
+import * as useUserDetailsModule from '@/features/auth/hooks/useUserDetails';
 
 vi.mock('react-router', async () => {
     const actual = await vi.importActual('react-router');

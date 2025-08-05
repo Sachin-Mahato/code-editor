@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import "@testing-library/jest-dom";
 import { MemoryRouter } from 'react-router';
-import { useFeatures } from '@/hooks/useFeatures';
-import FeaturesSection from '@/components/landingPage/FeatureSection';
-import { Item } from '@/types/types';
+import { useFeatures } from '@/core/utils/useFeatures';
+import FeaturesSection from '@/pages/landingPage/FeatureSection';
+import { Item } from '@/features/fileExplorer/types/types';
 
 describe("FeaturesSection", () => {
     it("Should render all features provided in the 'features' prop", () => {

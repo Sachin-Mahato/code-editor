@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import AuthCTASection from "@/components/landingPage/AuthCTASection";
+import AuthCTASection from "@/pages/landingPage/AuthCTASection";
 import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { useFeatures } from '@/hooks/useFeatures';
+import { useFeatures } from '@/core/utils/useFeatures';
 import LoginPage from '@/components/auth/LoginPage';
-import SignupPage from '@/components/auth/SignupPage';
+import SignupPage from '@/features/auth/view/SignupPage';
 import userEvent from '@testing-library/user-event';
 
 describe("AuthCTASection", () => {

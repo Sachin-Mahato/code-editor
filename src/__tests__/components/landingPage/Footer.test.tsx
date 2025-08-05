@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import Footer from "@/components/landingPage/Footer";
+import Footer from "@/pages/landingPage/Footer";
 import "@testing-library/jest-dom";
 import { MemoryRouter } from 'react-router';
 

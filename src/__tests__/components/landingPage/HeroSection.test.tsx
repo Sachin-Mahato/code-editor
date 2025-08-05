@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import HeroSection from "@/components/landingPage/HeroSection";
+import HeroSection from "@/pages/landingPage/HeroSection";
 import "@testing-library/jest-dom";
 import { MemoryRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';

@@ -1,4 +1,4 @@
-import { useFeatures } from "@/hooks/useFeatures";
+import { useFeatures } from "@/core/utils/useFeatures";
 import { renderHook } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 

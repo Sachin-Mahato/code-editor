@@ -1,13 +1,6 @@
-import FileTreeContainer from "@/components/fileTree/FileTreeContainer";
-import { TabsProvider } from "./contexts/tabs/TabContextProvider";
+import AppRouter from "./router";
+
 export default function App() {
-
-    return (
-        <TabsProvider>
-
-            <FileTreeContainer />
-        </TabsProvider>
-
-    )
+    return <AppRouter />
 }
 

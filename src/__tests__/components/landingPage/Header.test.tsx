@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, vi, expect } from 'vitest';
-import Header from "@/components/landingPage/Header";
+import Header from "@/pages/landingPage/Header";
 import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from 'react-router';
 import userEvent from '@testing-library/user-event';
 import LoginPage from '@/components/auth/LoginPage';
-import SignupPage from '@/components/auth/SignupPage';
+import SignupPage from '@/features/auth/view/SignupPage';
 
 
 describe("Header", () => {

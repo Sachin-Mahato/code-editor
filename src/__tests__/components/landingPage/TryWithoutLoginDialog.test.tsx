@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import TryWithoutLoginDialog from "@/components/landingPage/TryWithoutLoginDialog";
+import TryWithoutLoginDialog from "@/pages/landingPage/TryWithoutLoginDialog";
 import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from 'react-router';
-import SignupPage from '@/components/auth/SignupPage';
-import Workspace from '@/components/workspace/Workspace';
+import SignupPage from '@/features/auth/view/SignupPage';
+import Workspace from '@/features/editor/components/Workspace';
 import userEvent from '@testing-library/user-event';
 
 describe("TryWithoutLoginDialog", () => {
