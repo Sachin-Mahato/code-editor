@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -8,28 +8,35 @@ import FileSystemTree from "./FileSystemTree"
 
 interface Node {
     name: string
-    nodes?: Node[]
+    nodes?: Set<string>
 }
 
 const FileExplorer = () => {
     const { fileList } = useFileContext();
     const [searchTerm, setSearchTerm] = useState("");
-    const [folders, setFolders] = useState<Node[]>([]);
+    const [folders, setFolders] = useState<Node>({
+        name: "src",
+        nodes: new Set<string>()
+    })
+
+    const nodes = useMemo(() => {
+        if (!fileList?.length) return new Set<string>();
+        return new Set(fileList.map(f => f.fileName));
+    }, [fileList]);
 
     useEffect(() => {
-        if (fileList.length > 0) {
-            // Convert each file into a Node
-            const nodes: Node[] = fileList.map((f: any) => ({ name: f.fileName }));
+        const currentNodes = folders.nodes;
+        const hasNodesChanged =
+            currentNodes!.size !== nodes.size ||
+            ![...currentNodes!].every(node => nodes.has(node));
 
-            const folder: Node = {
-                name: "src",
-                nodes,
-            };
-
-            // Add this folder to the folders state
-            setFolders((prev) => [...prev, folder]); // Or use [...prev, folder] if you want to append
+        if (hasNodesChanged) {
+            setFolders(prev => ({
+                ...prev,
+                nodes
+            }));
         }
-    }, [fileList]);
+    }, [nodes]);
 
     return (
         <div className="flex flex-col h-full">
@@ -71,9 +78,7 @@ const FileExplorer = () => {
             <ScrollArea className="flex-1">
                 <div className="py-1">
                     {
-                        folders.map((f) => (
-                            <FileSystemTree key={f.name} node={f} />
-                        ))
+                        <FileSystemTree node={folders} />
                     }
                 </div>
             </ScrollArea>

@@ -8,7 +8,6 @@ export default function Tabs() {
     const mappedTabs = tabs.map(tab => ({
         fileId: tab.fileId,
         fileName: tab.fileName,
-        language: tab.language,
         isModified: tab.isModified,
         isActive: tab.isActive
     }));

@@ -2,6 +2,7 @@ import React from "react"
 import Workspace from "@/features/editor/components/Workspace"
 import LivePreview from "@/features/livePreview/LivePreview"
 import Divider from "@/features/fileExplorer/components/Divider"
+import useFileContext from "@/core/store/file/useFileContext"
 
 interface ContentAreaProps {
     containerRef: React.RefObject<HTMLDivElement | null>
@@ -10,8 +11,7 @@ interface ContentAreaProps {
     isDragging: boolean
     onMouseDownDivider: React.MouseEventHandler
     onDividerDoubleClick: () => void
-    tabs: Array<{ fileId: string; isOpen: boolean; language: string; content: string }>
-    htmlFiles: Array<{ fileId: string; content: string }>
+    tabs: Array<{ fileId: string; isOpen: boolean; content: string }>
 }
 
 const ContentArea: React.FC<ContentAreaProps> = (
@@ -21,12 +21,11 @@ const ContentArea: React.FC<ContentAreaProps> = (
         splitRatio,
         onMouseDownDivider,
         onDividerDoubleClick,
-        tabs,
-        htmlFiles,
     }
 ) => {
     const showCode = previewMode === "code" || previewMode === "split"
     const showPreview = previewMode === "preview" || previewMode === "split"
+    const { fileList, openIds } = useFileContext()
 
     return (
         <div className="flex flex-1 min-h-0 overflow-hidden" ref={containerRef}
@@ -37,8 +36,12 @@ const ContentArea: React.FC<ContentAreaProps> = (
                     className="min-w-0 overflow-hidden bg-[#1e1e1e] flex flex-col"
                     style={{ width: previewMode === "split" ? `${splitRatio}%` : "100%" }}
                 >
-                    {tabs.length > 0 ? (
-                        tabs.map((f) => f.isOpen && <Workspace key={f.fileId} id={f.fileId} lang={f.language} val={f.content} />)
+                    {fileList.length > 0 ? (
+                        fileList
+                            .filter(f => openIds.includes(f.id!))
+                            .map(f => (
+                                <Workspace key={f.id} id={f.id} val={f.sourceCode} />
+                            ))
                     ) : (
                         <EmptyState icon="📝" title="No files open" subtitle="Open a file from the explorer to start coding" />
                     )}
@@ -54,8 +57,8 @@ const ContentArea: React.FC<ContentAreaProps> = (
                     className="min-w-0 overflow-hidden flex flex-col bg-white"
                     style={{ width: previewMode === "split" ? `${100 - splitRatio}%` : "100%" }}
                 >
-                    {htmlFiles.length > 0 ? (
-                        htmlFiles.map((f) => <LivePreview key={f.fileId} htmlValue={f.content} />)
+                    {fileList.length > 0 ? (
+                        fileList.filter(f => f.language === "HTML").map((f) => <LivePreview key={f.id} htmlValue={f.sourceCode!} />)
                     ) : (
                         <EmptyState icon="🌐" title="No HTML to preview" subtitle="Create an HTML file to see the live preview" />
                     )}

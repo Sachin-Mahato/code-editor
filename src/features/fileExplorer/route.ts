@@ -1,5 +1,8 @@
 import { RouteObject } from "react-router";
-import EditorContainer from "./view/EditorContainer";
+import { lazy } from "react";
+
+const EditorContainer = lazy(() => import("./view/EditorContainer"));
+
 export const codeRoutes: RouteObject[] = [
     {
         path: "/code",

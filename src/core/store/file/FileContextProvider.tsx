@@ -8,6 +8,8 @@ export const FileContextProvider: React.FC<{ children: ReactNode }> = ({ childre
     const [state, dispatch] = useReducer(fileReducer, initialFileState);
     const memoFileState = useMemo<FileContextType>(() => ({
         fileList: state.fileList,
+        openIds: state.openIds,
+        active: state.active,
         editorVal: state.editorVal,
     }), [state.fileList, state.editorVal]);
 

@@ -3,7 +3,6 @@ import { FileType } from "@/features/fileExplorer/types/types";
 export interface FileTab {
     fileId: string;
     fileName: string;
-    language: string;
     isModified: boolean;
     isActive: boolean;
 }
@@ -14,9 +13,11 @@ export type TabsAction =
     | { type: "SWITCH_TAB"; payload: string };
 
 export interface FileState {
-    fileInputValue: string;
     fileList: FileType[];
+    openIds: string[];
+    active: string;
     editorVal: string;
+
 }
 
 export type TabsState = FileTab[];

@@ -1,8 +1,10 @@
-import { FileState, FileAction } from "@/features/fileExplorer/types/types";
+import { FileState } from "@/features/editor/types/types";
+import { FileAction } from "@/features/fileExplorer/types/types";
 
 export const initialFileState: FileState = {
-    fileInputValue: "",
     fileList: [],
+    openIds: [],
+    active: "",
     editorVal: "",
 };
 
@@ -14,8 +16,8 @@ export default function fileReducer(
         case "RESET_EDITOR_VALUE":
             return { ...state, editorVal: "" };
 
-        case "SET_FILE_INPUT_VALUE":
-            return { ...state, fileInputValue: action.payload };
+        // case "SET_FILE_INPUT_VALUE":
+        //     return { ...state, fileInputValue: action.payload };
 
         case "UPDATE_EDITOR":
             return {
@@ -30,12 +32,12 @@ export default function fileReducer(
             };
 
         case "TOGGLE_FILE_ACTIVE":
-            const toggleFile = state.fileList.filter((f) =>
-                f.fileName === action.payload ? !f.isOpen : f.isOpen,
+            const file = state.fileList.find(
+                (f) => f.fileName === action.payload,
             );
             return {
                 ...state,
-                fileList: [...toggleFile],
+                openIds: file && file.id ? [file.id] : [],
             };
 
         default: {

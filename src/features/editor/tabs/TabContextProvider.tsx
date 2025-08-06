@@ -1,7 +1,7 @@
 import { ReactNode, useReducer } from "react";
 import tabsReducer from "@/core/reducers/tabsReducer";
-import { TabsContext, TabsDispatchContext } from "@/features/editor/tabs/tabContext";
-import { TabsState } from "@/features/fileExplorer/types/types";
+import { TabsContext, TabsDispatchContext, TabsState } from "@/features/editor/tabs/tabContext";
+
 
 const initialState: TabsState = [];
 

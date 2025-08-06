@@ -46,6 +46,6 @@ export function useActionDispatchers() {
             dispatch({ type: "RESET_EDITOR_VALUE" });
         },
         openFileInWorkspace: (fileName: string) =>
-            dispatch({ type: "TOGGLE_FILE_ACTIVE", payload: fileName }),
+            dispatch({ type: "TOGGLE_FILE_ACTIVE", payload: fileName.trim() }),
     };
 }

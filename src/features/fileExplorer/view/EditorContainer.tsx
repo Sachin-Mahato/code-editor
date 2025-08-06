@@ -1,6 +1,6 @@
 import { FileContextProvider } from "@/core/store/file/FileContextProvider"
 import { FileTreeLayout } from "../components/FileTreeLayout"
-
+import { TabsProvider } from "@/features/editor/tabs/TabContextProvider"
 const EditorContainer = () => {
     return (
         <div
@@ -9,8 +9,11 @@ const EditorContainer = () => {
             data-testid="file-tree-container">
 
             <FileContextProvider>
+                <TabsProvider>
 
-                <FileTreeLayout />
+                    <FileTreeLayout />
+                </TabsProvider>
+
             </FileContextProvider>
 
 

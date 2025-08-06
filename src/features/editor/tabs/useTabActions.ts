@@ -1,4 +1,4 @@
-import { FileTab } from "@/features/fileExplorer/types/types";
+import { FileTab } from "../types/types";
 import useTabsDispatch from "./useTabDispatch";
 
 export default function useTabActions() {

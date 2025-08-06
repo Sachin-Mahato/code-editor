@@ -5,11 +5,9 @@ import ExplorerPanel from "./ExplorerPanel"
 import TabsArea from "@/features/fileExplorer/view/TabArea"
 import CodeArea from "./CodeArea"
 import useTab from "@/features/editor/tabs/useTab"
-import { useActionDispatchers } from "@/core/store/file/useFileActionDispatcher"
 
 export const FileTreeLayout = () => {
     const { tabs } = useTab()
-    const { } = useActionDispatchers()
 
     const [isExplorerCollapsed, setIsExplorerCollapsed] = useState(false)
     const [previewMode, setPreviewMode] = useState<"split" | "preview" | "code">("split")
@@ -17,14 +15,11 @@ export const FileTreeLayout = () => {
     const [isDragging, setIsDragging] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
 
-    // Mock htmlFiles for now - this should be replaced with actual implementation
-    const htmlFiles: Array<{ fileId: string; content: string }> = []
 
     // Map tabs to the expected format for CodeArea
     const mappedTabs = tabs.map(tab => ({
         fileId: tab.fileId,
         isOpen: true, // Assuming all tabs are open
-        language: tab.language,
         content: "" // This should be replaced with actual content
     }))
 
@@ -84,7 +79,6 @@ export const FileTreeLayout = () => {
                         onMouseDownDivider={handleMouseDown}
                         onDividerDoubleClick={handleDividerDoubleClick}
                         tabs={mappedTabs}
-                        htmlFiles={htmlFiles}
                     />
                 </div>
             </div>

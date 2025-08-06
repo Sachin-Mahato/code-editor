@@ -1,6 +1,6 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import TabItem from "@/features/editor/components/TabItems"
-import { FileTab } from "@/features/fileExplorer/types/types"
+import { FileTab } from "../types/types"
 
 interface TabsContainerProps {
     tabs: FileTab[]
@@ -24,7 +24,6 @@ export default function TabsContainer({
                             key={t.fileId}
                             fileId={t.fileId}
                             fileName={t.fileName}
-                            language={t.language}
                             isModified={t.isModified}
                             isActive={t.fileId === activeTabId}
                             onActivate={onSwitch}

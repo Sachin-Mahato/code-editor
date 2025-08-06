@@ -2,7 +2,7 @@ import { Link } from "react-router"
 import { Button } from "@/components/ui/button"
 import { Home, ArrowLeft } from "lucide-react"
 
-export default function MinimalNotFound() {
+export default function NotFoundPage() {
     return (
         <div className="min-h-screen bg-white flex items-center justify-center p-4">
             <div className="text-center max-w-md mx-auto">

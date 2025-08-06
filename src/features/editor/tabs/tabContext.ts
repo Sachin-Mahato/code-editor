@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { FileTab } from "@/features/fileExplorer/types/types";
+import { FileTab } from "../types/types";
 
 export type TabsState = FileTab[];
-export type ActiveTabState = string | null; // null means no active tab
+export type ActiveTabState = string | null;
 
 export type TabsAction =
     | { type: "SET_TABS"; payload: FileTab[] }

@@ -7,7 +7,6 @@ import { getLanguageIcon, getLanguageColor } from "@/features/fileExplorer/utils
 interface TabItemProps {
     fileId: string
     fileName: string
-    language: string
     isModified: boolean
     isActive: boolean
     onActivate: (id: string) => void
@@ -17,7 +16,6 @@ interface TabItemProps {
 export default function TabItem({
     fileId,
     fileName,
-    language,
     isModified,
     isActive,
     onActivate,
@@ -38,8 +36,8 @@ export default function TabItem({
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
         >
-            <div className={getLanguageColor(language)}>
-                {getLanguageIcon(language)}
+            <div className={getLanguageColor(fileName)}>
+                {getLanguageIcon(fileName)}
             </div>
 
             <span className="text-xs font-medium truncate flex-1">{fileName}</span>
