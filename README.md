@@ -1,64 +1,44 @@
-# Web Code Editor App
+# Web Code Editor
 
-A web-based HTML and CSS playground—no need to install any IDE or editor!
+**Web Code Editor** is a browser-based code editor that lets you write and test code instantly — without installing any packages or runtimes. It's designed to be as simple and accessible as possible: all you need is a browser and internet connection.
 
----
+## ✨ Features
 
-## Features
+- Supports **HTML** and **CSS** (JavaScript support coming soon)
+- **Syntax highlighting**
+- **Autocomplete**
+- **No installation required**
+- **Project saving** (requires sign-up)
+- Backend-powered with persistent storage
 
-- Autocomplete
-- Syntax highlighting
-- Live preview
-- Tabs for multiple files
-- HTML and CSS support
+## 🚀 Getting Started
 
-## Upcoming Features
+To start coding right away, just visit:
 
-- Persistent data (save your work)
-- Multiple file and folder support
-- JavaScript
+👉 [web-codeEditor.netlify.app.com](https://web-codeEditor.netlify.app.com)
 
-## Installation
+If you'd like to **save your projects**, create a free account — otherwise, you're welcome to code without signing up (but your work won’t be saved after you close the browser).
 
-### Prerequisites
+## 🛠 Tech Stack
 
-- [Node.js](https://nodejs.org/) (v18+ recommended)
-- [pnpm](https://pnpm.io/) or [npm](https://www.npmjs.com/)
+### Frontend:
+- React (with TypeScript)
+- Monaco Editor (via `@monaco-editor/react`)
+- Tailwind CSS
+- React Query
+- React Router
 
-### Steps
+### Backend:
+- Java + Spring Boot
+- **Spring Security**
+- Maven
+- PostgreSQL (hosted on **AWS RDS**)
+- Backend deployed on **AWS EC2**
 
-```sh
-pnpm install
-# or
-npm install
-```
+## 📌 About the Project
 
-## Usage
+This project was built as part of my portfolio to showcase my skills in React and full-stack development. I'm currently seeking **junior React** or **frontend developer** positions.
 
-```sh
-pnpm run dev
-# or
-npm run dev
-```
+## 🤝 Contributing
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-## Running Tests
-
-```sh
-pnpm test
-# or
-npm run test
-```
-
-## Live Demo
-
-[https://web-code-editor-app.netlify.app/](https://web-code-editor-app.netlify.app/)
-
-## Contributing
-
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-[MIT](LICENSE)
+This project isn’t currently open to outside contributions, but feel free to explore the code and reach out with feedback or questions!
