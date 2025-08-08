@@ -15,7 +15,7 @@
 
 To start coding right away, just visit:
 
-👉 [code-editor](https://web-code.editor.netlify.app)
+👉 [code-editor](https://web-code-editor-app.netlify.app/)
 
 If you'd like to **save your projects**, create a free account — otherwise, you're welcome to code without signing up (but your work won’t be saved after you close the browser).
 
