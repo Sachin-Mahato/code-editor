@@ -51,8 +51,11 @@ const ContentArea: React.FC<ContentAreaProps> = ({
             {showPreview && (
                 <div className="min-w-0 overflow-hidden flex flex-col bg-white"
                     style={{ width: previewMode === "split" ? `${100 - splitRatio}%` : "100%" }}>
-                    {activeFile && activeFile.language && activeFile.language.toLowerCase() === "html" ? (
-                        <LivePreview key={activeFile.id} htmlValue={activeFile.sourceCode!} />
+                    {fileList.filter(f => f.language === "HTML") ? (
+                        fileList.map(f => (
+                            <LivePreview key={f.id} htmlValue={f.sourceCode!} />
+                        )
+                        )
                     ) : (
                         <EmptyState icon="🌐" title="No HTML to preview" subtitle="Select an HTML file to see the live preview" />
                     )}
