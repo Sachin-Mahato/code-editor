@@ -1,34 +1,24 @@
 import { Editor, type OnMount, } from "@monaco-editor/react";
 import React, { useEffect, useRef, useCallback } from "react";
 import { Separator } from "@/components/ui/separator";
-import useFileContext from "@/core/store/file/useFileContext";
 
 
 interface WorkspaceProps {
-    id?: string;
-    lang?: string;
-    val?: string;
+    id: string;
+    lang: string;
+    val: string;
 }
 
-const DEFAULT_ID = "default-id";
-const DEFAULT_LANG = "javascript";
-const DEFAULT_VAL = "";
 
 const Workspace: React.FC<WorkspaceProps> = ({
-    id = DEFAULT_ID,
-    lang = DEFAULT_LANG,
-    val = DEFAULT_VAL,
+    id,
+    lang,
+    val
 }) => {
-    const { editorVal } = useFileContext();
-    // Removed call to useActionDispatchers
+    // const { editorVal } = useFileContext();
 
-
-    // Use proper typing for editor instance from Monaco Editor
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const editorRef = useRef<any>(null);
-
-
-
     // Stable mount handler using useCallback
     const handleEditorDidMount: OnMount = useCallback((editorInstance) => {
         editorRef.current = editorInstance;
@@ -39,7 +29,6 @@ const Workspace: React.FC<WorkspaceProps> = ({
     useEffect(() => {
         editorRef.current?.focus();
     }, []);
-
     return (
         <div
             className="flex flex-col w-full h-full bg-[#1e1e1e] overflow-hidden"
@@ -53,7 +42,7 @@ const Workspace: React.FC<WorkspaceProps> = ({
                     path={id}
                     language={lang}
                     defaultValue={val}
-                    value={editorVal}
+                    value={val}
                     onMount={handleEditorDidMount}
                     options={{
                         minimap: { enabled: false },

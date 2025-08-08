@@ -36,7 +36,7 @@ const FileExplorer = () => {
                 nodes
             }));
         }
-    }, [nodes]);
+    }, [nodes, folders.nodes]);
 
     return (
         <div className="flex flex-col h-full">

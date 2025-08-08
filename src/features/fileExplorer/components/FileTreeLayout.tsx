@@ -15,14 +15,6 @@ export const FileTreeLayout = () => {
     const [isDragging, setIsDragging] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
 
-
-    // Map tabs to the expected format for CodeArea
-    const mappedTabs = tabs.map(tab => ({
-        fileId: tab.fileId,
-        isOpen: true, // Assuming all tabs are open
-        content: "" // This should be replaced with actual content
-    }))
-
     const handleMouseDown = useCallback(() => {
         setIsDragging(true)
     }, [])
@@ -78,7 +70,6 @@ export const FileTreeLayout = () => {
                         isDragging={isDragging}
                         onMouseDownDivider={handleMouseDown}
                         onDividerDoubleClick={handleDividerDoubleClick}
-                        tabs={mappedTabs}
                     />
                 </div>
             </div>

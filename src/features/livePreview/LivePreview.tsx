@@ -16,7 +16,9 @@ const LivePreview: React.FC<LivePreviewProps> = ({ htmlValue }) => {
     <html lang="en">
       <head>
         <meta charset="UTF-8" />
-        <style>${css}</style>
+        <style>
+        ${css}
+        </style>
       </head>
       <body>
         ${htmlValue}

@@ -19,6 +19,8 @@ dist-ssr
 
 # Local override files
 *.local
+*.qodo
+.qodo
 
 # Editor directories and files
 .vscode/*

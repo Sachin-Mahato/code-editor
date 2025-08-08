@@ -16,9 +16,6 @@ export default function fileReducer(
         case "RESET_EDITOR_VALUE":
             return { ...state, editorVal: "" };
 
-        // case "SET_FILE_INPUT_VALUE":
-        //     return { ...state, fileInputValue: action.payload };
-
         case "UPDATE_EDITOR":
             return {
                 ...state,
@@ -28,17 +25,43 @@ export default function fileReducer(
         case "ADD_FILE_FROM_API":
             return {
                 ...state,
-                fileList: [...state.fileList, ...action.payload],
+                fileList: [...action.payload],
+                openIds: action.payload
+                    ?.filter((f) => f.language === "HTML" && f.id !== undefined)
+                    .map((f) => f.id as string),
+
+                active: (() => {
+                    const htmlFile = action.payload.find(
+                        (f) => f.language === "HTML" && f.id !== undefined,
+                    );
+                    return htmlFile?.id ?? "";
+                })(),
             };
 
-        case "TOGGLE_FILE_ACTIVE":
+        case "TOGGLE_FILE_ACTIVE": {
+            // Find the file by fileName
             const file = state.fileList.find(
                 (f) => f.fileName === action.payload,
             );
+            const activeId = file?.id ?? "";
+
+            if (!activeId) {
+                // If no file or id found, do not change state
+                return state;
+            }
+
+            // Add the id to openIds if not already present
+            const openIds = state.openIds.includes(activeId)
+                ? state.openIds
+                : [...state.openIds, activeId];
+
+            console.log({ active: activeId, ids: openIds });
             return {
                 ...state,
-                openIds: file && file.id ? [file.id] : [],
+                openIds,
+                active: activeId,
             };
+        }
 
         default: {
             // Exhaustiveness check
