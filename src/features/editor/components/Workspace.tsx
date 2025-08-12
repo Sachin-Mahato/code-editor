@@ -1,7 +1,7 @@
 import { Editor, type OnMount, } from "@monaco-editor/react";
 import React, { useEffect, useRef, useCallback } from "react";
 import { Separator } from "@/components/ui/separator";
-
+import { useActionDispatchers } from "@/core/store/file/useFileActionDispatcher";
 
 interface WorkspaceProps {
     id: string;
@@ -9,14 +9,12 @@ interface WorkspaceProps {
     val: string;
 }
 
-
 const Workspace: React.FC<WorkspaceProps> = ({
     id,
     lang,
     val
 }) => {
-    // const { editorVal } = useFileContext();
-
+    const { handleEditorChange } = useActionDispatchers()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const editorRef = useRef<any>(null);
     // Stable mount handler using useCallback
@@ -29,6 +27,7 @@ const Workspace: React.FC<WorkspaceProps> = ({
     useEffect(() => {
         editorRef.current?.focus();
     }, []);
+
     return (
         <div
             className="flex flex-col w-full h-full bg-[#1e1e1e] overflow-hidden"
@@ -44,6 +43,7 @@ const Workspace: React.FC<WorkspaceProps> = ({
                     defaultValue={val}
                     value={val}
                     onMount={handleEditorDidMount}
+                    onChange={(value) => handleEditorChange(id, lang, value!)}
                     options={{
                         minimap: { enabled: false },
                         fontSize: 14,

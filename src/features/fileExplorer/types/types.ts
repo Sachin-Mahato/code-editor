@@ -36,7 +36,7 @@ export interface FileBase extends ApiFileResponse {
     children?: FileBase;
 }
 
-export interface FileType extends FileBase {}
+export type FileType = FileBase;
 
 export interface FileItem {
     id: string;

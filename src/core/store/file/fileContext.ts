@@ -6,7 +6,7 @@ export interface FileContextType {
     fileList: FileType[];
     openIds: string[];
     active: string;
-    editorVal: string;
+    editorContent: string;
 }
 
 export const FileContext = createContext<FileContextType | null>(null);

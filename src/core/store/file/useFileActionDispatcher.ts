@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import useStorage from "@/core/utils/useStorage";
 import useFile from "@/core/utils/useFile";
 import { useFileTreeDispatch } from "./useFileTreeDispatch";
@@ -13,24 +13,28 @@ export function useActionDispatchers() {
         );
     }
 
-    const { data } = useFile(token ?? "");
-    useEffect(() => {
-        if (data) {
-            dispatch({ type: "ADD_FILE_FROM_API", payload: data });
-        }
-    }, [data, dispatch]);
+    const { data, dataUpdatedAt } = useFile(token ?? "");
 
-    return {
-        handleEditorChange: (
-            value: string | null,
-            id?: string,
-            lang?: string,
-        ): void => {
+    const lastAppliedUpdateRef = useRef<number>(0);
+
+    useEffect(() => {
+        if (!data || !dataUpdatedAt) return;
+
+        // Only dispatch when the server data has actually updated
+        if (lastAppliedUpdateRef.current === dataUpdatedAt) return;
+
+        lastAppliedUpdateRef.current = dataUpdatedAt;
+
+        dispatch({ type: "ADD_FILE_FROM_API", payload: data });
+    }, [dataUpdatedAt, data, dispatch]);
+
+    const handleEditorChange = useCallback(
+        (id: string, lang: string, value: string): void => {
             if (id && lang) {
                 dispatch({
                     type: "UPDATE_EDITOR",
                     payload: {
-                        value: value ?? "",
+                        value,
                         id,
                         lang,
                     },
@@ -42,10 +46,23 @@ export function useActionDispatchers() {
                 });
             }
         },
-        resetEditorValue: (): void => {
-            dispatch({ type: "RESET_EDITOR_VALUE" });
+        [dispatch],
+    );
+
+    const resetEditorValue = useCallback((): void => {
+        dispatch({ type: "RESET_EDITOR_VALUE" });
+    }, [dispatch]);
+
+    const openFileInWorkspace = useCallback(
+        (fileName: string) => {
+            dispatch({ type: "TOGGLE_FILE_ACTIVE", payload: fileName.trim() });
         },
-        openFileInWorkspace: (fileName: string) =>
-            dispatch({ type: "TOGGLE_FILE_ACTIVE", payload: fileName.trim() }),
+        [dispatch],
+    );
+
+    return {
+        handleEditorChange,
+        resetEditorValue,
+        openFileInWorkspace,
     };
 }

@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import React, { useRef, useEffect } from "react";
 import useFileContext from "@/core/store/file/useFileContext";
 
 interface LivePreviewProps {
@@ -9,28 +9,35 @@ const LivePreview: React.FC<LivePreviewProps> = ({ htmlValue }) => {
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const { fileList } = useFileContext();
 
-    const css = useMemo(() => fileList.filter(f => f.language === "CSS").map(file => file.sourceCode).join("\n"), [fileList?.length]);
+    const css = fileList
+        .filter(file => file.language === "CSS")
+        .map(file => file.sourceCode)
+        .join("\n");
 
-    const srcDoc = useMemo(() => `
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <style>
-        ${css}
-        </style>
-      </head>
-      <body>
-        ${htmlValue}
-      </body>
-    </html>
-  `, [css, htmlValue]);
+    useEffect(() => {
+        const iframe = iframeRef.current;
+        if (!iframe) return;
+
+        const doc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!doc) return;
+
+        // Clear previous content
+        doc.body.innerHTML = '';
+        doc.head.innerHTML = '';
+
+        const styleEl = doc.createElement("style");
+        styleEl.textContent = css;
+        doc.head.appendChild(styleEl);
+
+        const wrapper = doc.createElement("div");
+        wrapper.innerHTML = htmlValue;
+        doc.body.appendChild(wrapper);
+    }, [htmlValue, css]);
 
     return (
         <iframe
             ref={iframeRef}
             title="Live Preview"
-            srcDoc={srcDoc}
             sandbox="allow-scripts allow-same-origin"
             className="w-full h-full border-0 bg-white"
             style={{ minHeight: "100%" }}
@@ -38,4 +45,5 @@ const LivePreview: React.FC<LivePreviewProps> = ({ htmlValue }) => {
     );
 };
 
-export default LivePreview;
+export default React.memo(LivePreview);
+

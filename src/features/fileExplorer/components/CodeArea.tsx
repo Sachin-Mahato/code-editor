@@ -26,6 +26,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 
     const activeFile = fileList.find(f => f.id === active);
 
+
     return (
         <div className="flex flex-1 min-h-0 overflow-hidden" ref={containerRef} data-testid="code-area">
             {showCode && (

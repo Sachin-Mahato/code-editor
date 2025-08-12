@@ -16,8 +16,7 @@ export interface FileState {
     fileList: FileType[];
     openIds: string[];
     active: string;
-    editorVal: string;
-
+    editorContent: string;
 }
 
 export type TabsState = FileTab[];

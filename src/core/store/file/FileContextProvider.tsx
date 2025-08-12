@@ -10,8 +10,8 @@ export const FileContextProvider: React.FC<{ children: ReactNode }> = ({ childre
         fileList: state.fileList,
         openIds: state.openIds,
         active: state.active,
-        editorVal: state.editorVal,
-    }), [state.fileList, state.editorVal, state.openIds, state.active]);
+        editorContent: state.editorContent,
+    }), [state.fileList, state.editorContent, state.openIds, state.active]);
 
     const memoDispatch = useMemo(() => dispatch, [])
 
