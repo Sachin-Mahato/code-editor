@@ -4,7 +4,7 @@ import { createContext } from "react";
 export interface FileContextType {
     // State
     fileList: FileType[];
-    openIds: string[];
+    // openIds: string[];
     active: string;
     editorContent: string;
 }

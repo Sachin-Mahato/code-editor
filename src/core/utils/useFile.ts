@@ -5,12 +5,11 @@ import { mapApiFilesResponse } from "@/core/utils/utils";
 
 export default function useFile(token: string) {
     const query = useQuery({
-        queryKey: ["fileService", 1],
+        queryKey: ["fileService", token],
         queryFn: () => filesService(token),
         enabled: !!token,
         gcTime: 1000 * 60 * 10,
-        // Hardening to avoid frequent focus-triggered refetches that can reset UI
-        staleTime: 1000 * 30, // data considered fresh for 30s
+        staleTime: 1000 * 60, // data considered fresh for 30s
         refetchOnWindowFocus: false,
     });
 

@@ -14,7 +14,7 @@ export type TabsAction =
 
 export interface FileState {
     fileList: FileType[];
-    openIds: string[];
+    // openIds: string[];
     active: string;
     editorContent: string;
 }

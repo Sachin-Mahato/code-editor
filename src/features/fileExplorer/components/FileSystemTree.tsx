@@ -1,7 +1,7 @@
 import { useState, memo } from "react"
 import { Folder, FolderOpen } from "lucide-react"
 import { getLanguageColor, getLanguageIcon } from "../utils/languageUtil"
-import { useActionDispatchers } from "@/core/store/file/useFileActionDispatcher"
+import { useFileActionDispatchers } from "@/core/store/file/useFileActionDispatcher"
 
 type Node = {
     name: string
@@ -10,8 +10,7 @@ type Node = {
 
 const FileSystemTree = memo(({ node }: { node: Node }) => {
     const [expanded, setExpanded] = useState(true)
-    const { openFileInWorkspace } = useActionDispatchers()
-
+    const { openFileInWorkspace } = useFileActionDispatchers()
     const handleFileClick = (fileName: string) => {
         openFileInWorkspace(fileName)
     }
@@ -55,3 +54,4 @@ const FileSystemTree = memo(({ node }: { node: Node }) => {
 
 
 export default FileSystemTree
+
