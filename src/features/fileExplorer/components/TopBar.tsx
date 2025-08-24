@@ -3,27 +3,30 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Plus, Play, RotateCcw, Maximize2, Settings, PanelLeftClose, PanelLeftOpen } from "lucide-react"
+import useSplit from "../contexts/useSplit"
 
 interface TopBarProps {
     isExplorerCollapsed: boolean
     onToggleExplorer: () => void
-    previewMode: "split" | "preview" | "code"
-    onChangePreviewMode: (mode: "split" | "preview" | "code") => void
 }
 
 const TopBar: React.FC<TopBarProps> = ({
     isExplorerCollapsed,
     onToggleExplorer,
-    previewMode,
-    onChangePreviewMode,
-}) => (
-    <div className="flex items-center justify-between px-3 py-2 bg-[#2d2d30] border-b border-gray-700 flex-shrink-0 h-10">
+}) => {
+    const { previewMode, handlePreview } = useSplit();
+
+    return (<div className="flex items-center justify-between px-3 py-2 bg-[#2d2d30] border-b border-gray-700 flex-shrink-0 h-10">
         <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={onToggleExplorer}>
-                {isExplorerCollapsed ? <PanelLeftOpen className="h-3 w-3" /> : <PanelLeftClose className="h-3 w-3" />}
+                {isExplorerCollapsed ?
+                    <PanelLeftOpen className="h-3 w-3" />
+                    : <PanelLeftClose className="h-3 w-3" />}
             </Button>
             <Separator orientation="vertical" className="h-4 bg-gray-600" />
-            <Badge variant="secondary" className="bg-green-600 text-white text-xs px-1.5 py-0.5 h-5">
+            <Badge
+                variant="secondary"
+                className="bg-green-600 text-white text-xs px-1.5 py-0.5 h-5">
                 <div className="w-1.5 h-1.5 bg-white rounded-full mr-1" />
                 Live
             </Badge>
@@ -36,8 +39,9 @@ const TopBar: React.FC<TopBarProps> = ({
                     key={mode}
                     variant={previewMode === mode ? "secondary" : "ghost"}
                     size="sm"
-                    className="h-5 px-2 text-xs"
-                    onClick={() => onChangePreviewMode(mode)}
+                    className="h-5 px-2 text-xs cursor-pointer"
+                    onClick={() => handlePreview(mode)}
+
                 >
                     {mode.charAt(0).toUpperCase() + mode.slice(1)}
                 </Button>
@@ -46,12 +50,24 @@ const TopBar: React.FC<TopBarProps> = ({
 
         <div className="flex items-center gap-1">
             <Button variant="ghost" size="sm"><Plus className="h-3 w-3" /></Button>
-            <Separator orientation="vertical" className="h-4 mx-1 bg-gray-600" />
-            {[Play, RotateCcw, Maximize2, Settings].map((Icon, i) => (
-                <Button key={i} variant="ghost" size="sm"><Icon className="h-3 w-3" /></Button>
+            <RotateCcw onClick={() => console.log("hello")} className="hover:bg-white hover:rounded cursor-pointer">
+
+                <Button variant={"ghost"} size={"sm"}  >
+                    <div className="w-3 h-3"></div>
+                </Button>
+            </RotateCcw>
+            {[Play, Maximize2, Settings].map((Icon, i) => (
+                <Button
+                    key={i}
+                    variant="ghost"
+                    size="sm"
+                >
+                    <Icon className="h-3 w-3" />
+                </Button>
             ))}
         </div>
     </div>
-)
+    )
+}
 
 export default TopBar

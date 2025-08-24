@@ -1,21 +1,17 @@
 import { Editor, type OnMount, } from "@monaco-editor/react";
-import React, { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { Separator } from "@/components/ui/separator";
 import useFileContext from "@/core/store/file/useFileContext";
 import { useFileActionDispatchers } from "@/core/store/file/useFileActionDispatcher";
 
-interface WorkspaceProps {
-    id: string;
-    lang: string;
-    val: string;
-}
-
-const Workspace: React.FC<WorkspaceProps> = ({
-    id,
-    lang,
-    val
-}) => {
+const Workspace = () => {
     const { editorContent } = useFileContext()
+    const { fileList, active } = useFileContext();
+
+    const activeFile = fileList.find(f => f.id === active);
+    const id = activeFile?.id
+    const val = activeFile?.sourceCode
+    const lang = activeFile?.language
     const { handleEditorChange } = useFileActionDispatchers()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const editorRef = useRef<any>(null);
@@ -29,10 +25,6 @@ const Workspace: React.FC<WorkspaceProps> = ({
     useEffect(() => {
         editorRef.current?.focus();
     }, []);
-
-    // useEffect(() => {
-    //     editorService(token!, id, val)
-    // }, [token, id, val])
 
     return (
         <div
@@ -49,7 +41,7 @@ const Workspace: React.FC<WorkspaceProps> = ({
                     defaultValue={val}
                     value={editorContent}
                     onMount={handleEditorDidMount}
-                    onChange={(value) => handleEditorChange(id, lang, value!)}
+                    onChange={(value) => handleEditorChange(id!, lang!, value!)}
                     options={{
                         minimap: { enabled: false },
                         fontSize: 14,

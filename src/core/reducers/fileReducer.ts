@@ -41,21 +41,35 @@ export default function fileReducer(
         }
 
         case "ADD_FILE_FROM_API": {
-            const data = (action.payload ?? []).map((f) => ({
-                ...f,
-                id: String(f.id),
-                fileName:
-                    typeof f.fileName === "string"
-                        ? f.fileName.trim()
-                        : f.fileName,
-                language:
-                    typeof f.language === "string"
-                        ? f.language.toUpperCase()
-                        : f.language,
-                sourceCode:
-                    typeof f.sourceCode === "string" ? f.sourceCode : "",
-                isOpen: false,
-            }));
+            const data = (action.payload ?? [])
+                .map((f) => ({
+                    ...f,
+                    id: String(f.id),
+                    fileName:
+                        typeof f.fileName === "string"
+                            ? f.fileName.trim()
+                            : f.fileName,
+                    language:
+                        typeof f.language === "string"
+                            ? f.language.toUpperCase()
+                            : f.language,
+                    sourceCode:
+                        typeof f.sourceCode === "string" ? f.sourceCode : "",
+                    isOpen: false,
+                }))
+                .sort((x, y) => {
+                    const first = x.fileName?.toUpperCase() as string;
+                    const last = y.fileName?.toUpperCase() as string;
+
+                    if (first < last) {
+                        return -1;
+                    }
+                    if (first > last) {
+                        return 1;
+                    }
+
+                    return 0;
+                });
 
             const ids = new Set(data.map((f) => f.id));
             const keepActive = Boolean(state.active && ids.has(state.active));

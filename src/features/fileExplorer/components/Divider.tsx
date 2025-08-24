@@ -5,8 +5,9 @@ interface DividerProps {
     onDoubleClick: () => void
 }
 
-const Divider: React.FC<DividerProps> = ({ onMouseDown, onDoubleClick }) => (
-    <div
+const Divider: React.FC<DividerProps> = ({ onMouseDown, onDoubleClick }) => {
+    return <div
+
         className="w-1 bg-gray-700 hover:bg-blue-500 cursor-col-resize flex-shrink-0 transition-colors duration-200 relative group"
         onMouseDown={onMouseDown}
         onDoubleClick={onDoubleClick}
@@ -16,6 +17,6 @@ const Divider: React.FC<DividerProps> = ({ onMouseDown, onDoubleClick }) => (
             <div className="w-1 h-8 bg-blue-400 rounded-full" />
         </div>
     </div>
-)
+}
 
 export default Divider
