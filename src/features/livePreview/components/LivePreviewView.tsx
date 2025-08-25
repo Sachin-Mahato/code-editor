@@ -1,16 +1,16 @@
 
 interface LivePreviewViewProps {
     readonly htmlValue: string;
-    readonly css?: string
+    readonly cssValue?: string
 
 }
-export default function LivePreviewView({ htmlValue, css, }: LivePreviewViewProps) {
+export default function LivePreviewView({ htmlValue, cssValue, }: LivePreviewViewProps) {
     const doc = `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>${css}</style>
+  <style>${cssValue}</style>
 </head>
 <body>
   ${htmlValue}

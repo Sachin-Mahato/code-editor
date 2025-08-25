@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import useResize from "../hooks/useResize";
-import Workspace from "@/features/editor/components/Workspace";
 import CodePreview from "./CodePreview";
 import PreviewSection from "./PreviewSection";
 import WorkspaceContainer from "@/features/editor/components/WorkspaceContainer";
+import Workspace from "@/features/editor/components/Workspace";
+import PreviewPane from "@/features/livePreview/components/PreviewPane";
 
 const ContentArea = () => {
     const containerRef = useRef<HTMLDivElement | null>(null)
@@ -18,14 +19,18 @@ const ContentArea = () => {
 
             <CodePreview splitRatio={splitRatio}>
                 <WorkspaceContainer>
+
                     <Workspace />
                 </WorkspaceContainer>
             </CodePreview>
 
             <PreviewSection
-                splitRatio={splitRatio}
                 onMouseDown={handleMouseDown}
                 onDoubleClick={handleDividerDoubleClick}
+            />
+
+            <PreviewPane
+                splitRatio={splitRatio}
             />
         </div>
     );

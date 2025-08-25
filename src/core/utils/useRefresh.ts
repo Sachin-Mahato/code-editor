@@ -1,20 +1,37 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useDeferredValue, useState } from "react";
+import useFileContext from "../store/file/useFileContext";
 
-export default function useRefresh(htmlValue: string, css: string) {
-    const htmlRefValue = useRef(htmlValue);
-    const cssRefValue = useRef(css);
-    const latestHtmlRefValue = useRef(htmlValue);
-    const latestCssRefValue = useRef(css);
+export default function useRefresh() {
+    const { fileList } = useFileContext();
+    const htmlFiles = fileList.filter(
+        (f) => f.language?.toUpperCase().trim() === "HTML".trim(),
+    );
 
-    useEffect(() => {
-        latestHtmlRefValue.current = htmlValue;
-        latestCssRefValue.current = css;
-    }, [htmlValue, css]);
+    const htmlValue = htmlFiles.map((f) => f.sourceCode).join("\n");
 
-    const refreshHandler = useCallback(() => {
-        htmlRefValue.current = latestHtmlRefValue.current;
-        cssRefValue.current = latestCssRefValue.current;
-    }, []);
+    const css = fileList
+        .filter((file) => file.language === "CSS")
+        .map((file) => file.sourceCode)
+        .join("\n");
 
-    return { refreshHandler, htmlRefValue, cssRefValue };
+    const [previewCss, setPreviewCss] = useState(css);
+    const [previewHtml, setPreviewHtml] = useState(htmlValue);
+
+    const updatePreview = () => {
+        setPreviewCss(css);
+        setPreviewHtml(htmlValue);
+    };
+
+    const CSS = useDeferredValue(previewCss);
+    const HTML = useDeferredValue(previewHtml);
+
+    return {
+        HTML,
+        CSS,
+        updatePreview,
+        previewHtml,
+        previewCss,
+        htmlValue,
+        css,
+    };
 }

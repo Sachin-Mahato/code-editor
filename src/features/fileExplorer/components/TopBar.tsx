@@ -15,7 +15,6 @@ const TopBar: React.FC<TopBarProps> = ({
     onToggleExplorer,
 }) => {
     const { previewMode, handlePreview } = useSplit();
-
     return (<div className="flex items-center justify-between px-3 py-2 bg-[#2d2d30] border-b border-gray-700 flex-shrink-0 h-10">
         <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={onToggleExplorer}>
@@ -50,13 +49,8 @@ const TopBar: React.FC<TopBarProps> = ({
 
         <div className="flex items-center gap-1">
             <Button variant="ghost" size="sm"><Plus className="h-3 w-3" /></Button>
-            <RotateCcw onClick={() => console.log("hello")} className="hover:bg-white hover:rounded cursor-pointer">
 
-                <Button variant={"ghost"} size={"sm"}  >
-                    <div className="w-3 h-3"></div>
-                </Button>
-            </RotateCcw>
-            {[Play, Maximize2, Settings].map((Icon, i) => (
+            {[Play, RotateCcw, Maximize2, Settings].map((Icon, i) => (
                 <Button
                     key={i}
                     variant="ghost"

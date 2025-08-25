@@ -6,10 +6,12 @@ interface CodePreviewProps {
     splitRatio: number
 }
 const CodePreview: React.FC<CodePreviewProps> = ({ splitRatio, children }) => {
-    const { previewMode } = useSplit()
+    const { isSplitView, showCode } = useSplit()
+
+    if (!showCode) return null;
 
     const widthStyle = {
-        width: previewMode === 'split' ? `${splitRatio}%` : '100%',
+        width: isSplitView ? `${splitRatio}%` : '100%',
     };
 
     return (

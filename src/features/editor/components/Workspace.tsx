@@ -1,25 +1,25 @@
 import { Separator } from "@/components/ui/separator";
 import useFileContext from "@/core/store/file/useFileContext";
 import useActive from "../hooks/useActive";
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 
 const Editor = lazy(() => import("./Editor"))
 const Workspace = () => {
     const { fileList, active } = useFileContext();
     const { id, lang, val } = useActive(fileList, active)
-
-    console.log("hello from workspace")
     return (
         <div
             className="flex flex-col w-full h-full bg-[#1e1e1e] overflow-hidden"
             role="main"
         >
+            <Suspense fallback={<div>...Loading</div>}>
 
-            <Editor
-                id={id!}
-                lang={lang!}
-                val={val!}
-            />
+                <Editor
+                    id={id!}
+                    lang={lang!}
+                    val={val!}
+                />
+            </Suspense>
 
             <footer
                 className="flex items-center justify-between px-3 py-1 bg-[#007acc] text-white text-xs flex-shrink-0 h-6"
