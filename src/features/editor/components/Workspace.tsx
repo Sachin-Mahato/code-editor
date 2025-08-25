@@ -1,69 +1,25 @@
-import { Editor, type OnMount, } from "@monaco-editor/react";
-import { useEffect, useRef, useCallback } from "react";
 import { Separator } from "@/components/ui/separator";
 import useFileContext from "@/core/store/file/useFileContext";
-import { useFileActionDispatchers } from "@/core/store/file/useFileActionDispatcher";
+import useActive from "../hooks/useActive";
+import { lazy } from "react";
 
+const Editor = lazy(() => import("./Editor"))
 const Workspace = () => {
-    const { editorContent } = useFileContext()
     const { fileList, active } = useFileContext();
+    const { id, lang, val } = useActive(fileList, active)
 
-    const activeFile = fileList.find(f => f.id === active);
-    const id = activeFile?.id
-    const val = activeFile?.sourceCode
-    const lang = activeFile?.language
-    const { handleEditorChange } = useFileActionDispatchers()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const editorRef = useRef<any>(null);
-    // Stable mount handler using useCallback
-    const handleEditorDidMount: OnMount = useCallback((editorInstance) => {
-        editorRef.current = editorInstance;
-        editorInstance.focus();
-    }, []);
-
-    // Focus editor on mount
-    useEffect(() => {
-        editorRef.current?.focus();
-    }, []);
-
+    console.log("hello from workspace")
     return (
         <div
             className="flex flex-col w-full h-full bg-[#1e1e1e] overflow-hidden"
             role="main"
         >
-            <div className="flex-1 relative bg-[#1e1e1e] overflow-hidden min-h-0">
-                <Editor
-                    height="100%"
-                    width="100%"
-                    theme="vs-dark"
-                    path={id}
-                    language={lang}
-                    defaultValue={val}
-                    value={editorContent}
-                    onMount={handleEditorDidMount}
-                    onChange={(value) => handleEditorChange(id!, lang!, value!)}
-                    options={{
-                        minimap: { enabled: false },
-                        fontSize: 14,
-                        fontFamily: "Fira Code, Consolas, Courier New, monospace",
-                        lineHeight: 1.5,
-                        padding: { top: 8, bottom: 8 },
-                        scrollBeyondLastLine: false,
-                        smoothScrolling: true,
-                        cursorBlinking: "smooth",
-                        renderLineHighlight: "all",
-                        bracketPairColorization: { enabled: true },
-                        wordWrap: "on",
-                        automaticLayout: true,
-                        tabSize: 4,
-                        insertSpaces: true,
-                        useTabStops: true,
-                        detectIndentation: false,
-                        formatOnPaste: true,
-                        formatOnType: true,
-                    }}
-                />
-            </div>
+
+            <Editor
+                id={id!}
+                lang={lang!}
+                val={val!}
+            />
 
             <footer
                 className="flex items-center justify-between px-3 py-1 bg-[#007acc] text-white text-xs flex-shrink-0 h-6"

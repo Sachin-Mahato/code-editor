@@ -16,13 +16,11 @@ const ContentArea = () => {
             data-testid="code-area"
         >
 
-            <CodePreview
-                splitRatio={splitRatio}
-                children={
-                    <WorkspaceContainer
-                        children={<Workspace />} />
-                }
-            />
+            <CodePreview splitRatio={splitRatio}>
+                <WorkspaceContainer>
+                    <Workspace />
+                </WorkspaceContainer>
+            </CodePreview>
 
             <PreviewSection
                 splitRatio={splitRatio}
